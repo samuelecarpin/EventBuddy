@@ -5,7 +5,7 @@ import { globalStyles } from '../styles/global';
 export default function login({navigation}) {
 
   const pressHandler = () => {
-    navigation.navigate('eventoSingolo');
+    navigation.navigate('creaEvento');
   }
 
   return(
