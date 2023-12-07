@@ -7,5 +7,6 @@ const App = () => {
     <Navigator />
   );
 };
+//aaa
 
 export default App;
