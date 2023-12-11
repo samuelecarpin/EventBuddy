@@ -6,6 +6,7 @@ import eventoSingolo from '../screens/eventoSingolo';
 import creaEvento from '../screens/creaEvento';
 
 const screens = {
+    
     login: {
         screen: login
     },

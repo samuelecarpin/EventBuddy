@@ -42,7 +42,7 @@ export default function Home({navigation}) {
           </ImageBackground>
         </View>
         <View style={globalStyles.FormContainer}>
-          <TouchableOpacity style={[globalStyles.button, globalStyles.ombraBottoneBlu]} onPress={pressHandler}>
+          <TouchableOpacity style={[globalStyles.button]} onPress={pressHandler}>
             <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 15}]}>Contatta l'organizzatore</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[globalStyles.infoContainer, globalStyles.ombra]} onPress={pressHandler}>
