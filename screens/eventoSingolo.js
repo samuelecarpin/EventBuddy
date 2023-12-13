@@ -1,54 +1,92 @@
 import React from 'react';
-import {View, Text, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native';
+import { ScrollView, View, Text, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native';
 import { globalStyles } from '../styles/global';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Octicons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Home({navigation}) {
-
   const pressHandler = () => {
 
     navigation.goBack();
 
   }
 
-  const immagineBack = {uri: 'file:///Users/jacopofelluga/Desktop/EventBuddy/images/368861160_694974532667393_1102515412597951598_n-1080x1080.jpg'};
+  var dettagliEvento = [];
 
-  return(
-    // safearea X non intralciare con date e robe
-      <View style={{flex: 1, backgroundColor: '#F5F5F5'}}>
-        <View style={globalStyles.viewImmagineCopertina}>
-          <ImageBackground source={immagineBack} resizeMode="cover" style={globalStyles.immagineCopertina}>
-          <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.7)']} style={globalStyles.viewImmagineCopertina} >
-            {/*condividi/torna indeitro */}
-            <View style={globalStyles.bottoniCopertinaEvento}>
-              <TouchableOpacity onPress={pressHandler}>
-                <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={pressHandler}>
-                <Octicons style={{marginTop: 3}} name="share" size={27} color="white" />
-              </TouchableOpacity>
-            </View>
-            {/*titolo */}
-            <View style={globalStyles.titoloCopertinaEvento}>
-              <Text style={globalStyles.nomeEvento}>LuminosaFest Extravaganza</Text>
-            </View>
-            {/*data e ora*/}
-            <View style={globalStyles.dettagliCopertinaEvento}>
-              <Text style={globalStyles.panoramicaEvento}>27/10/2024 AT 20:00 | 16+</Text>
-            </View>
-            </LinearGradient>
-          </ImageBackground>
+  var lisitaDettagli = ["Drink gratis", "VIP Area", "Ingresso Omaggio per le Donne Fino alle 10 puuhhhiibbu"];
+    for(let i = 0; i < lisitaDettagli.length; i++){
+		  dettagliEvento.push(
+        <View style={[globalStyles.row, {justifyContent: 'left'}]}>
+          <Image style={globalStyles.listItem} source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/coriandoli.png?alt=media&token=4f9f14ad-91ee-4f3b-941a-96bc5d657fb6'}} />
+          <Text style={{ paddingRight: 70}}>{lisitaDettagli[i]}</Text>
         </View>
-        <View style={globalStyles.FormContainer}>
-          <TouchableOpacity style={[globalStyles.button, globalStyles.ombraBottoneBlu]} onPress={pressHandler}>
-            <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 15}]}>Contatta l'organizzatore</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[globalStyles.infoContainer, globalStyles.ombra]} onPress={pressHandler}>
-            <Text style={{ fontWeight: 'bold', fontSize: 15}}>Luogo dell'evento</Text>
-          </TouchableOpacity>
-        </View>
+		  )
+	  }
+
+    var listaTags = ["#freedrink", "#vip", "#music","#freedrink", "#vip", "#music","#freedrink", "#vip", "#music","#freedrink", "#vip", "#music","#freedrink", "#vip", "#music","#freedrink", "#vip", "#music",];
+
+  const immagineBack = {uri: 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/368861160_694974532667393_1102515412597951598_n-1080x1080.jpg?alt=media&token=98b3f19f-c6d3-4740-b299-d10d44632617'};
+
+    return(
+      // safearea X non intralciare con date e robe
+      <ScrollView>
+        <View style={{flex: 1, backgroundColor: '#FFF'}}>
+          <View style={globalStyles.viewImmagineCopertina}>
+            <ImageBackground source={immagineBack} resizeMode="cover" style={globalStyles.immagineCopertina}>
+            <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.7)']} style={globalStyles.viewImmagineCopertina} >
+              {/*condividi/torna indeitro */}
+              <View style={globalStyles.bottoniCopertinaEvento}>
+                <TouchableOpacity onPress={pressHandler}>
+                  <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={pressHandler}>
+                  <Octicons style={{marginTop: 3}} name="share" size={27} color="white" />
+                </TouchableOpacity>
+              </View>
+              {/*titolo */}
+              <View style={globalStyles.titoloCopertinaEvento}>
+                <Text style={globalStyles.nomeEvento}>LuminosaFest Extravaganza</Text>
+              </View>
+              {/*data e ora*/}
+              <View style={globalStyles.dettagliCopertinaEvento}>
+                <Text style={globalStyles.panoramicaEvento}>27/10/2024 AT 20:00 | 16+</Text>
+              </View>
+              </LinearGradient>
+            </ImageBackground>
+          </View>
+          <View style={globalStyles.FormContainer}>
+            <TouchableOpacity style={[globalStyles.button]} onPress={pressHandler}>
+              <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 18}]}>Contatta l'organizzatore</Text>
+            </TouchableOpacity>
+            {/*<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+              <View>
+                <Text style={{width: 100, textAlign: 'center'}}>Informazioni</Text>
+              </View>
+              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+            </View>*/}
+            {/*informazioni */}
+            <TouchableOpacity style={[globalStyles.infoContainer, {alignItems: 'center'}]}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18}}>Luogo dell'evento</Text>
+            </TouchableOpacity>
+            {/*mappa */}
+            {/*dettagli evento */}
+            <View style={[globalStyles.infoContainer, {alignItems: 'center'}]} >
+              <Text style={{ fontWeight: 'bold', fontSize: 18}}>Dettagli evento</Text>
+              {dettagliEvento}
+            </View>
+            {/*tag evento */}
+            <View style={[globalStyles.infoContainer, {alignItems: 'center'}]} >
+              <Text style={{ fontWeight: 'bold', fontSize: 18}}>Tag evento</Text>
+              <Text style={{paddingLeft: 15, paddingRight: 15, paddingTop: 10}}>{listaTags}</Text>
+            </View>
+            {/*social */}
+            <View>
+              
+            </View>
+          </View>
       </View>
-  );
+    </ScrollView>
+    );
 };

@@ -4,16 +4,20 @@ import home from '../screens/home.js';
 import login from '../screens/login.js';
 import eventoSingolo from '../screens/eventoSingolo';
 import creaEvento from '../screens/creaEvento';
+import navigation from '../screens/navigation.js'
 
 const screens = {
+    navigation: {
+        screen: navigation
+    },
+    home: {
+        screen: home
+    },
     login: {
         screen: login
     },
     eventoSingolo: {
         screen: eventoSingolo
-    },
-    home: {
-        screen: home
     },
     creaEvento: {
         screen: creaEvento

@@ -13,7 +13,7 @@ export default function login({navigation}) {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF'}}>
       <View style={{flex: 1}}>
       <View style={globalStyles.LogoContainer}>
-        <Image style={globalStyles.tinyLogo} source={{ uri: 'file:///Users/jacopofelluga/Desktop/EventBuddy/images/EventBuddy%20only%20logo.png'}} />
+        <Image style={globalStyles.tinyLogo} source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/EventBuddy%20only%20logo.png?alt=media&token=50be2592-b7ca-4ead-8c25-d48c3fca699c'}} />
       </View>
       <View style={globalStyles.LoginContainer}>
         <View style={globalStyles.FormContainer}>
