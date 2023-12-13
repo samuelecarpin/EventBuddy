@@ -164,7 +164,15 @@ export const globalStyles = StyleSheet.create({
       justifyContent: 'space-between',
       width: widthScreen-50,
     },
-    
+    map: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 30
+    },
+    mapContainer: {
+      width: widthScreen-50,
+      height: heightScreen*3/10,
+    },
     selettorePiccolo: {
       width: widthScreen*3.5/10,
       alignContent: 'center',
@@ -198,5 +206,16 @@ export const globalStyles = StyleSheet.create({
       height: 23,
       marginRight: 10,
       marginLeft: 10
+    },
+    caricaDocumenti: {
+      borderColor: '#062F76',
+      borderWidth: 5,
+      borderRadius: 30,
+      borderStyle: 'dotted',
+      width: widthScreen-50,
+      height: (widthScreen-50)*9/16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 50,
     }
   });
