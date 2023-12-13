@@ -78,7 +78,6 @@ export const globalStyles = StyleSheet.create({
       height: 40,
       borderColor: 'gray', 
       borderWidth: 1, 
-      marginBottom: 10, 
       padding: 5
     },
     forgotButton: {

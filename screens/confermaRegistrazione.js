@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, SafeAreaView, TextInput} from 'react-native';
 import { globalStyles } from '../styles/global';
-import { FontAwesome } from '@expo/vector-icons';
 
 export default function login({navigation}) {
 
@@ -30,11 +29,11 @@ export default function login({navigation}) {
           <TouchableOpacity onPress={registrazione} style={[globalStyles.forgotButton, { marginTop: 10}]}>
             <Text style={{fontWeight: 'bold', fontSize: 12, color: '#062F76'}}>Registrati</Text>
           </TouchableOpacity>
-          <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#062F76', marginBottom: 10, marginTop: 10}}>o</Text>
-          <TouchableOpacity onPress={registrazione} style={[globalStyles.forgotButton]}>
-            <Text style={{fontWeight: 'bold', fontSize: 12, color: '#062F76'}}><FontAwesome name="google" size={15} color="#062F76" /> Login</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#062F76', marginBottom: 10, marginTop: 10}}>-</Text>
+          <TouchableOpacity onPress={registrazione} style={[globalStyles.forgotButton, { marginTop: 10}]}>
+            <Text style={{fontWeight: 'bold', fontSize: 12, color: '#062F76'}}>Continua con Google</Text>
           </TouchableOpacity>
-          <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#062F76', marginBottom: 10, marginTop: 10}}>---</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#062F76', marginBottom: 10, marginTop: 10}}>o</Text>
           <TouchableOpacity style={globalStyles.forgotButton}>
             <Text style={{ fontWeight: 'bold', fontSize: 12, color: '#062F76'}}>Recupera Password</Text>
           </TouchableOpacity>

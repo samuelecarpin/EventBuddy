@@ -4,6 +4,7 @@ import home from '../screens/home.js';
 import login from '../screens/login.js';
 import eventoSingolo from '../screens/eventoSingolo';
 import creaEvento from '../screens/creaEvento';
+import registrazione from '../screens/registrazione';
 
 const screens = {
     
@@ -18,6 +19,9 @@ const screens = {
     },
     creaEvento: {
         screen: creaEvento
+    },
+    registrazione: {
+        screen: registrazione
     },
 }
 
