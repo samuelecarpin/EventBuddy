@@ -164,7 +164,17 @@ export const globalStyles = StyleSheet.create({
       justifyContent: 'space-between',
       width: widthScreen-50,
     },
-    
+    map: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 30
+    },
+    mapContainer: {
+      width: widthScreen-50,
+      height: heightScreen*3/10,
+      overflow:"hidden",
+      borderRadius: 30,
+    },
     selettorePiccolo: {
       width: widthScreen*3.5/10,
       alignContent: 'center',
@@ -257,6 +267,7 @@ export const globalStyles = StyleSheet.create({
       marginRight: "15%",
       marginLeft: "15%",
       borderRadius: 40,
+      width: widthScreen-50,
     },
     labelRaggioMappa: {
       fontSize: 16,
@@ -279,6 +290,7 @@ export const globalStyles = StyleSheet.create({
       alignContent: "center",
     },
     containerCardEventi: {
+      width: widthScreen-50,
       height:150,
       marginTop:10,
       marginHorizontal:10,
@@ -314,4 +326,21 @@ export const globalStyles = StyleSheet.create({
       backgroundColor: 'blue',
       height: 70,
     },
-    });
+    listItem: {
+      width: 23,
+      height: 23,
+      marginRight: 10,
+      marginLeft: 10
+    },
+    caricaDocumenti: {
+      borderColor: '#062F76',
+      borderWidth: 5,
+      borderRadius: 30,
+      borderStyle: 'dotted',
+      width: widthScreen-50,
+      height: (widthScreen-50)*9/16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 50,
+    },
+  });

@@ -29,13 +29,17 @@ const App = () => {
     <NavigationContainer style={globalStyles.navStyles}>
       <Tab.Navigator
         tabBarOptions={{
-            activeTintColor: 'white',
-            inactiveTintColor: 'gray',
-            backgroundColor: 'blue',
-            style:globalStyles.navStyles,
-            }}>
+            activeTintColor: '#FFF',
+            inactiveTintColor: '#B0B0B0',
+            }}
+        screenOptions={{headerShown:false}}
+            >
         <Tab.Screen name="Home" component={HomeScreen}
             options={{
+                tabBarStyle: {
+                    backgroundColor:"#062F76",
+                    paddingTop:10,
+                },
                 tabBarLabel: 'Home',
                 tabBarIcon: ({ color, size }) => (
                 <Icon name="ios-home" color={color} size={size} />
@@ -44,6 +48,9 @@ const App = () => {
         />
         <Tab.Screen name="Personale" component={PersonaleScreen} 
             options={{
+                tabBarStyle: {
+                    backgroundColor:"#062F76",
+                },
                 tabBarLabel: 'Personale',
                 tabBarIcon: ({ color, size }) => (
                 <Ionicons name="people-sharp" size={size} color={color} />
@@ -52,6 +59,9 @@ const App = () => {
         />
         <Tab.Screen name="Crea" component={CreaScreen}
             options={{
+                tabBarStyle: {
+                    backgroundColor:"#062F76",
+                },
                 tabBarLabel: 'Crea',
                 tabBarIcon: ({ color, size }) => (
                 <AntDesign name="pluscircle" size={size} color={color} />
@@ -60,6 +70,9 @@ const App = () => {
         />
         <Tab.Screen name="Account" component={AccountScreen}
             options={{
+                tabBarStyle: {
+                    backgroundColor:"#062F76",
+                },
                 tabBarLabel: 'Account',
                 tabBarIcon: ({ color, size }) => (
                 <Ionicons name="person" size={size} color={color} />

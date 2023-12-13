@@ -1,9 +1,12 @@
-import React from 'react';
-import { ScrollView, View, Text, ImageBackground, Image, TouchableOpacity, SafeAreaView} from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import { ScrollView, Linking, View, Text, ImageBackground, Image, TouchableOpacity} from 'react-native';
 import { globalStyles } from '../styles/global';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Octicons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
+import Mappa from '../components/Mappa';
 
 export default function Home({navigation}) {
   const pressHandler = () => {
@@ -28,9 +31,42 @@ export default function Home({navigation}) {
 
   const immagineBack = {uri: 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/368861160_694974532667393_1102515412597951598_n-1080x1080.jpg?alt=media&token=98b3f19f-c6d3-4740-b299-d10d44632617'};
 
+    let [mapRegion, setLocation] = useState({
+      latitude: 37,
+      longitude: 37,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+    const userLocation = async () => {
+      const getPermissions = async () => { 
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
+        }
+        let currentLocation = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+        setLocation({
+          latitude: currentLocation.coords.latitude,
+          longitude: currentLocation.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      };
+      getPermissions();
+    }
+    useEffect(() => {
+      userLocation();
+    }, []);
+
+    const openMaps = (latitude, longitude) => {
+      const daddr = `${latitude},${longitude}`;
+      const company = Platform.OS === "ios" ? "apple" : "google";
+      Linking.openURL(`http://maps.${company}.com/maps?daddr=${daddr}`);
+    }
+
     return(
       // safearea X non intralciare con date e robe
-      <ScrollView>
+      <ScrollView style={{flex: 1,}}>
         <View style={{flex: 1, backgroundColor: '#FFF'}}>
           <View style={globalStyles.viewImmagineCopertina}>
             <ImageBackground source={immagineBack} resizeMode="cover" style={globalStyles.immagineCopertina}>
@@ -67,10 +103,13 @@ export default function Home({navigation}) {
               <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
             </View>*/}
             {/*informazioni */}
-            <TouchableOpacity style={[globalStyles.infoContainer, {alignItems: 'center'}]}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18}}>Luogo dell'evento</Text>
+            <TouchableOpacity onPress={() => openMaps(mapRegion.latitude, mapRegion.longitude)} style={[globalStyles.infoContainer, {alignItems: 'center'}]} >
+              <Text style={{ fontWeight: 'bold', fontSize: 18}}>Direzioni evento</Text>
             </TouchableOpacity>
             {/*mappa */}
+            <View style={globalStyles.mapContainer}>
+              <Mappa markers={mapRegion} />
+          </View>
             {/*dettagli evento */}
             <View style={[globalStyles.infoContainer, {alignItems: 'center'}]} >
               <Text style={{ fontWeight: 'bold', fontSize: 18}}>Dettagli evento</Text>
@@ -83,7 +122,6 @@ export default function Home({navigation}) {
             </View>
             {/*social */}
             <View>
-              
             </View>
           </View>
       </View>
