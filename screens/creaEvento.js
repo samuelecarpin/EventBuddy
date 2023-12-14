@@ -231,8 +231,8 @@ export default function Home({ navigation }) {
                     </View>
                 </View>*/}
                 {/*pubblica l'evento */}
-                <TouchableOpacity style={[globalStyles.button, globalStyles.ombraBottoneBlu, {marginTop: 15}]} onPress={pressHandler}>
-                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 15}]}>Pubblica il tuo evento</Text>
+                <TouchableOpacity style={[globalStyles.button, {marginTop: 15}]} onPress={pressHandler}>
+                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Pubblica il tuo evento</Text>
                 </TouchableOpacity>
             </View>
         </View>

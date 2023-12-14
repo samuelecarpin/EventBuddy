@@ -1,27 +1,14 @@
 import { createStackNavigator, TransitionSpecs, HeaderStyleInterpolators} from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import home from '../screens/home.js';
-import login from '../screens/login.js';
 import eventoSingolo from '../screens/eventoSingolo';
-import creaEvento from '../screens/creaEvento';
-import registrazione from '../screens/registrazione';
 
 const screens = {
-    
-    login: {
-        screen: login
-    },
-    eventoSingolo: {
-        screen: eventoSingolo
-    },
     home: {
         screen: home
     },
-    creaEvento: {
-        screen: creaEvento
-    },
-    registrazione: {
-        screen: registrazione
+    eventoSingolo: {
+        screen: eventoSingolo
     },
 }
 
@@ -32,4 +19,4 @@ const HomeStack = createStackNavigator(screens, {
 
   });
   
-  export default createAppContainer(HomeStack);
+export default createAppContainer(HomeStack);

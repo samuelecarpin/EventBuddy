@@ -74,6 +74,17 @@ export const globalStyles = StyleSheet.create({
       paddingTop: 15,
       paddingBottom: 15,
     },
+    logOut: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#DA4747',
+      width: '90%',
+      borderRadius: 30,
+      marginTop: 10,
+      marginBottom: 10,
+      paddingTop: 10,
+      paddingBottom: 10,
+    },
     inputCercaEvento: {
       height: 40,
       borderColor: 'gray', 
@@ -102,18 +113,6 @@ export const globalStyles = StyleSheet.create({
       borderBottomRightRadius: 40,
       overflow: "hidden",
       paddingTop: 10,
-    },
-    ombra: {
-      shadowColor: '#171717',
-      shadowOffset: {width: -2, height: 4},
-      shadowOpacity: 0.1,
-      shadowRadius: 3,
-    },
-    ombraBottoneBlu: {
-      shadowColor: '#171717',
-      shadowOffset: {width: -2, height: 4},
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
     },
     bottoniCopertinaEvento: {
       display: 'flex',
@@ -171,6 +170,8 @@ export const globalStyles = StyleSheet.create({
     mapContainer: {
       width: widthScreen-50,
       height: heightScreen*3/10,
+      overflow:"hidden",
+      borderRadius: 30,
     },
     selettorePiccolo: {
       width: widthScreen*3.5/10,
@@ -201,6 +202,129 @@ export const globalStyles = StyleSheet.create({
       elevation: 5,
     },
     listItem: {
+      width: 25,
+      height: 25,
+      marginRight: 10,
+      marginLeft: 10
+    },
+    headerMenu:{
+      marginTop: 30,
+      marginBottom: 10,
+      marginLeft: 20
+    },
+    inputCercaEvento: { 
+      backgroundColor: '#F7F7F7',
+      width: "80%",
+      height: 50,
+      borderColor: 'gray', 
+      padding: 5,
+      borderRadius: 50,
+
+    },
+    filtroCerca: {
+      padding:10,
+      justifyContent: "center",
+      alignContent: "center",
+      textAlign: "center",
+      backgroundColor: '#F7F7F7',
+      height: 50,
+      width: 50,
+      borderRadius: 100,
+      marginTop:30,
+    },
+    containerCercaHome: {
+      padding:10,
+      height:50,
+      marginTop:30,
+      marginLeft:10,
+      marginRight:10,
+      width:"80%",
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor:"#F7F7F7",
+      borderColor: 'gray',
+      borderRadius: 50,
+      paddingHorizontal: 20,
+    },
+    inputCercaHome: {
+      flex: 1,
+      height: 40,
+    },
+    searchIconCercaHome: {
+      marginLeft: 10,
+    },
+    containerRaggioMappa: {
+      padding: 10,
+      height:50,
+      marginVertical: 10,
+      flexDirection: 'row',
+      justifyContent: "center",
+      alignContent: "center",
+      alignItems: "center",
+      backgroundColor:"#F7F7F7",
+      marginRight: "15%",
+      marginLeft: "15%",
+      borderRadius: 40,
+      width: widthScreen-50,
+    },
+    labelRaggioMappa: {
+      fontSize: 16,
+      marginBottom: 5,
+      marginRight: 10,
+      alignContent: "center",
+    },
+    inputRaggioMappa: {
+      height: 40,
+      borderColor: 'gray',
+      borderRadius:40,
+      backgroundColor:"#FFF",
+      paddingHorizontal: 10,
+      textAlign: 'center', // Centra il testo orizzontalmente
+      alignItems: 'center', // Centra il testo verticalmente
+    },
+    testoEventiVicini: {
+      flex: 1,
+      justifyContent: "center",
+      alignContent: "center",
+    },
+    containerCardEventi: {
+      width: widthScreen-50,
+      height:150,
+      marginTop:10,
+      marginHorizontal:10,
+      flex: 1,
+      borderRadius: 40,
+      overflow: 'hidden',
+    },
+    backgroundImageCardEventi: {
+      flex: 1,
+      resizeMode: 'cover',
+      justifyContent: 'center',
+    },
+    contentContainerCardEventi: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)', // Overlay nero per migliorare la leggibilità del testo
+    },
+    titoloCardEventi: {
+      marginTop:"10%",
+      fontSize: 32,
+      fontWeight: 'bold',
+      color: 'white',
+      textAlign: 'center',
+    },
+    sottotitoloCardEventi: {
+      marginTop:"5%",
+      fontSize: 18,
+      color: 'white',
+      textAlign: 'center',
+    },
+    navStyle: {
+      backgroundColor: 'blue',
+      height: 70,
+    },
+    listItem: {
       width: 23,
       height: 23,
       marginRight: 10,
@@ -216,5 +340,12 @@ export const globalStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 50,
+    },
+    infoPersonaliSelettore: {
+      marginBottom: 10,
+      marginTop: 0,
+      width: '90%',
+      borderBottomColor: '#e7e7e7',
+      borderBottomWidth: 2
     }
   });
