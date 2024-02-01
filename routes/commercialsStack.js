@@ -1,18 +1,14 @@
 import { createStackNavigator} from 'react-navigation-stack';
-import { CardStyleInterpolators } from '@react-navigation/stack';
 import { createAppContainer } from 'react-navigation';
-import home from '../screens/home.js';
-import eventoSingolo from '../screens/eventoPersonaleSingolo.js';
+import locali from '../screens/locali.js';
+import creaEvento from '../screens/creaEvento';
 
 const screens = {
-    home: {
-        screen: home,
+    locali: {
+        screen: locali
     },
-    eventoSingolo: {
-        screen: eventoSingolo,
-        navigationOptions: {
-            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
-        }
+    creaEvento: {
+        screen: creaEvento
     },
 }
 

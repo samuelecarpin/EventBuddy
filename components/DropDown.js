@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { globalStyles } from '../styles/global';
 
-const DropdownComponent = ({ data }) => {
+const DropdownComponent = ({ data, onValueChange }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [text, setText] = useState(null);
+
+  useEffect(() => {
+    if (onValueChange) {
+      onValueChange(value);
+    }
+  }, [value, onValueChange]);
 
   return (
     <View>
@@ -21,7 +27,7 @@ const DropdownComponent = ({ data }) => {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Giorno' : '...'}
+        placeholder={!isFocus ? '' : ''}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}

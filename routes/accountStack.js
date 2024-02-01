@@ -1,28 +1,56 @@
-import { createStackNavigator, TransitionSpecs, HeaderStyleInterpolators} from 'react-navigation-stack';
+import { createStackNavigator} from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import account from '../screens/account.js';
-import eventoSingolo from '../screens/eventoSingolo.js';
+import eventoPersonaleSingolo from '../screens/eventoPersonaleSingolo.js';
+import eventiVisitati from '../screens/eventiVisitati.js';
+import eventiCreati from '../screens/eventiCreati.js'
+import login from '../screens/login.js';
+import registrazione from '../screens/registrazione.js';
+import confermaRegistrazione from '../screens/confermaRegistrazione.js';
+import modificaEvento from '../screens/modificaEvento.js';
+import duplicaEvento from '../screens/duplicaEvento.js';
+import waitingPage from '../screens/waitingPage.js';
+import eventiInteressanti from '../screens/eventiInteressanti.js';
 
 const screens = {
+    waitingPage: {
+        screen: waitingPage
+    },
+    login: {
+        screen: login,
+        navigationOptions: {
+            gestureEnabled: false,
+        }
+    },
     account: {
-        screen: account
+        screen: account,
+        navigationOptions: {
+            gestureEnabled: false,
+        }
+    },
+    registrazione: {
+        screen: registrazione
+    },
+    confermaRegistrazione: {
+        screen: confermaRegistrazione
     },
     /*informazioniPersonali: {
         screen: informazioniPersonali
     },
     linkSocial: {
         screen: linkSocial
-    },
+    },*/
     eventiVisitati: {
-        screen: eventiVisitati
+        screen: eventiVisitati,
     },
-    personaleAssunto: {
+    /*personaleAssunto: {
         screen: personaleAssunto
-    },
+    },*/
     eventiCreati: {
-        screen: eventiCreati
+        screen: eventiCreati,
     },
-    localiPersonali: {
+    /*localiPersonali: {
         screen: localiPersonali
     },
     resetPassword: {
@@ -31,8 +59,18 @@ const screens = {
     eliminaAccount: {
         screen: eliminaAccount
     },*/
-
-
+    eventoPersonaleSingolo: {
+        screen: eventoPersonaleSingolo
+    },
+    eventiInteressanti: {
+        screen: eventiInteressanti
+    },
+    modificaEvento: {
+        screen: modificaEvento
+    },
+    duplicaEvento: {
+        screen: duplicaEvento
+    },
 
 }
 

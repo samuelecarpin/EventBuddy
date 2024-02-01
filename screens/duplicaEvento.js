@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, TextInput, Alert, ScrollView, Modal } from 'react-native';
-import { Marker }  from 'react-native-maps';
-import MapView from 'react-native-maps';
 import { globalStyles } from '../styles/global';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Checkbox from 'expo-checkbox';
 import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
+//import DropDown from '../components/DropDown';
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as SecureStore from 'expo-secure-store';
 
@@ -26,6 +27,7 @@ export default function Home({ navigation }) {
     const [rimuoviTitolo, setrimuoviTitolo] = useState(true)
     const [visualizzaSocial, setvisualizzaSocial] = useState(false)
     const [eventoEsteso, seteventoEsteso] = useState(false)
+    const [immagineBack, setImmagineBack] = useState({uri: ''});
     //const [eventoRicorsivo, seteventoRicorsivo] = useState(false)
     const [apriCalendario, setapriCalendario] = useState(false)
     const [data, setData] = useState(null);
@@ -33,7 +35,6 @@ export default function Home({ navigation }) {
     const [dataFineEvento, setDataFineEvento] = useState(null)
     const [dataFineRipetizioni, setDataFineRipetizioni] = useState(null)
     const [dataSelezionata, setDataSelezionata] = useState(null)
-    const [immagineBack, setImmagineBack] = useState({uri: ''});
     const dataOdierna = new Date();
     const [startHour, setstartHour] = useState(null);
     const [endHour, setendHour] = useState(null);
@@ -41,14 +42,16 @@ export default function Home({ navigation }) {
     const [dontHaveLimit, setDontHaveLimit] = useState(false);
     const [key, setKey] = React.useState('userToken');
     const [value, setValue] = React.useState('');
-    getValueFor(key)
   
     async function getValueFor(key) {
         setValue(await SecureStore.getItemAsync(key));
+        if (value) {
+            getEvent();
+        }
     }
 
-    const handleDropdownChange = (value) => {
-      seteventType(value);
+    const handleEventType = (value) => {
+        seteventType(value);
     };
 
     const pressHandler = () => {
@@ -82,6 +85,10 @@ export default function Home({ navigation }) {
         setDataFineEvento(null)
     }
 
+    /*function mostraEventoRicorsivo () {
+        seteventoRicorsivo(!eventoRicorsivo);
+    }*/
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -89,12 +96,57 @@ export default function Home({ navigation }) {
         aspect: [4, 3],
         quality: 1,
         });
-        setrimuoviTitolo(false);
+        setrimuoviTitolo(!rimuoviTitolo);
         setSelectedImage(result.assets[0].uri);
         setImmagineBack({uri: result.assets[0].uri})
     };
 
-    const confermaRimozioneImmagine = () => {
+    const getEvent = async () => {
+        try {
+          const response = await fetch('http://eventbuddy.localhost/api/events/'+navigation.getParam('paramKey'), {
+            method: 'GET',
+            headers: {
+              Authorization: 'Bearer '+ value
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+                seteventName(data.name);
+                seteventDetails(data.details);
+                setDescription(data.description);
+                seteventAge(data.minimumAge);
+                seteventCost(data.price);
+                setLocation({
+                  latitude: data.latitude,
+                  longitude: data.longitude,
+                  latitudeDelta: 0.0422,
+                  longitudeDelta: 0.0421,
+                });
+                setMaxCapacity(data.maxCapacity);
+                setDontHaveLimit(data.maxCapacity == 0 ? true : false);
+                setstartDate(data.startDate.split(" ")[0].replace(/-/g, "/"))
+                setstartHour(data.startDate.split(" ")[1].slice(0, -3))
+                setDataFineEvento(data.endDate.split(" ")[0].replace(/-/g, "/"))
+                setendHour(data.endDate.split(" ")[1].slice(0, -3))
+                seteventType(data.eventType);
+            //   setData(data);
+            //   var date = new Date(data.startDate).toLocaleString();
+            //   setStartDate(date)
+            //   var date = new Date(data.endDate).toLocaleString();
+            //   setEndDate(date)
+          })
+        } catch (error) {
+          console.error('Error during login:', error);
+        }
+      };
+
+      const removeImage = async () => {
+        setrimuoviTitolo(true);
+        setSelectedImage(null);
+        setImmagineBack({uri: ''})
+      }
+
+      const confermaRimozioneImmagine = () => {
         Alert.alert(
           'Conferma Rimozione',
           'Sei sicuro di voler cancellare l\'immagine?',
@@ -112,7 +164,11 @@ export default function Home({ navigation }) {
         );
       };
 
-    function salvaEvento () {
+    useEffect(() => {
+        getValueFor(key);
+    }, [value]); 
+
+    function duplicaEvento () {
         if (startDate == null || dataFineEvento == null) {
             return alertDateErrate()
         }
@@ -129,7 +185,7 @@ export default function Home({ navigation }) {
         formData.append('details', eventDetails);
         selectedImage ? formData.append('image', {
             uri: selectedImage,
-            name: 'selected.jpg',
+            name: 'selectedImage.jpg',
             type: 'image/jpeg',
         }) : '';
         formData.append('eventType', eventType);
@@ -138,48 +194,43 @@ export default function Home({ navigation }) {
         formData.append('minimumAge', eventAge);
         formData.append('maxCapacity', dontHaveLimit ? 0 : maxCapacity);
         formData.append('price', eventCost);
-        try {
-            fetch('http://eventbuddy.localhost/api/create', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + value,
-                },
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        Alert.alert('Evento creato correttamente', 'Il tuo evento è stato creato con successo !', [
-                            {
-                                text: 'OK'
-                            },
-                        ]);
-                        navigation.navigate("paginaCrea");
-                    } else {
-                        if (data.error == "Massimo numero di eventi raggiunto") {
-                            return Alert.alert('Errore', "Massimo numero di eventi raggiunto", [
-                                {
-                                    text: 'OK'
-                                },
-                            ]);
-                        }
-                        var errorsKeys = Object.keys(data.error);
-                        var errorsObj = Object.values(data.error);
-                        var errors = "";
-                        for (let i = 0; i < errorsKeys.length; i++) {
-                            errors = errors + errorsKeys[i] + ": " + errorsObj[i] + "\n";
-                        }
-                        Alert.alert('Errore', errors, [
+        fetch('http://eventbuddy.localhost/api/create', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + value,
+            },
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success == true) {
+                    navigation.navigate("eventiCreati")
+                    Alert.alert('Evento creato correttamente', 'Il tuo evento è stato creato con successo !', [
+                        {
+                            text: 'OK'
+                        },
+                    ]);
+                } else {
+                    if (data.error == "Massimo numero di eventi raggiunto") {
+                        return Alert.alert('Errore', "Massimo numero di eventi raggiunto", [
                             {
                                 text: 'OK'
                             },
                         ]);
                     }
-                });
-        } catch (error) {
-            console.error('Si è verificato un errore durante la richiesta:', error);
-            // Puoi gestire l'errore qui, ad esempio mostrando un messaggio all'utente o effettuando altre azioni.
-        }
+                    var errorsKeys = Object.keys(data.error);
+                    var errorsObj = Object.values(data.error);
+                    var errors = "";
+                    for (i = 0; i < errorsKeys.length; i++) {
+                        errors = errors + errorsKeys[i] + ": " + errorsObj[i] + "\n"
+                    }
+                    Alert.alert('Errore', errors, [
+                        {
+                            text: 'OK'
+                        },
+                    ]);
+                }
+            })
     }
 
     let [mapRegion, setLocation] = useState({
@@ -192,12 +243,6 @@ export default function Home({ navigation }) {
       function setLimit () {
         setDontHaveLimit(!dontHaveLimit)
         setMaxCapacity(0);
-      }
-
-      const removeImage = async () => {
-        setrimuoviTitolo(true);
-        setSelectedImage(null);
-        setImmagineBack({uri: ''})
       }
 
       const userLocation = async () => {
@@ -221,10 +266,6 @@ export default function Home({ navigation }) {
         userLocation();
       }, []);
 
-    const handleEventType = (value) => {
-        seteventType(value);
-    };
-
     const alerteventDetails = () =>
         Alert.alert('Dettagli rapidi', 'I dettagli rapidi sono quelli che serviranno a dare una panoramica generale del tuo evento. Esempi di vario tipo possono essere Zona VIP, Regali e premi a sorpresa, Sagra di Paese, Drink Gratis', [
         {
@@ -237,12 +278,12 @@ export default function Home({ navigation }) {
             text: 'OK'
         },
     ]);
-    const alertTagEvento = () =>
-        Alert.alert('Tag evento', 'I Tag dell\'evento sono delle parole o frasi che servono per dare più visibilità al tuo evento. Per esempio se inserisci il tag #FreeDrink, e qualcuno cerca degli eventi con drink gratis, il tuo evento comparirà nella lista dei possibili eventi', [
-        {
-            text: 'OK'
-        },
-    ]);
+    // const alertTagEvento = () =>
+    //     Alert.alert('Tag evento', 'I Tag dell\'evento sono delle parole o frasi che servono per dare più visibilità al tuo evento. Per esempio se inserisci il tag #FreeDrink, e qualcuno cerca degli eventi con drink gratis, il tuo evento comparirà nella lista dei possibili eventi', [
+    //     {
+    //         text: 'OK'
+    //     },
+    // ]);
     const alertVisualizzaSocial = () =>
         Alert.alert('Visualizza Social', 'Facendo una spunta su questa casella permetterai alle persone di visualizzare i link ai social network che hai inserito nel tuo profilo. Se non hai inserito nessun link e vuoi inserirne uno vai su Account>Link ai social', [
         {
@@ -295,7 +336,7 @@ export default function Home({ navigation }) {
             </View>
             <View style={globalStyles.FormContainer}>
                 <Text style={{ fontWeight: 'bold', fontSize: 20}} >Nome dell'evento</Text>
-                    <TextInput onChangeText={titolo => seteventName(titolo)} style={globalStyles.input} placeholder="Nome dell'evento"></TextInput>
+                    <TextInput onChangeText={titolo => seteventName(titolo)} style={globalStyles.input} placeholder="Nome dell'evento">{eventName}</TextInput>
                 <View style={globalStyles.rigaTitoli}>
                     <Text style ={{marginLeft: 20}}></Text>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Luogo dell'evento</Text>
@@ -304,7 +345,7 @@ export default function Home({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 <View style={[globalStyles.searchContainer, { marginTop: 20, marginBottom: 20}]}>
-                    <MapView style={[globalStyles.map, {height: 300}]} region={mapRegion}>
+                <MapView style={[globalStyles.map, {height: 300}]} region={mapRegion}>
                         <Marker
                         coordinate={mapRegion}
                         />
@@ -319,8 +360,8 @@ export default function Home({ navigation }) {
                             setLocation({
                                 latitude: details.geometry.location.lat,
                                 longitude: details.geometry.location.lng,
-                                latitudeDelta: 0.1022,
-                                longitudeDelta: 0.1021,
+                                latitudeDelta: 1.0100,
+                                longitudeDelta: 1.0100,
                             });
                         }}
                         query={{
@@ -337,7 +378,7 @@ export default function Home({ navigation }) {
                         />
                 </View>
                 <Text style={{ fontWeight: 'bold', fontSize: 20}} >Descrizione evento</Text>
-                    <TextInput multiline = {true} onChangeText={description => setDescription(description)} style={[globalStyles.input, {height: 200}]} placeholder="Descrizione evento"></TextInput>
+                    <TextInput multiline = {true} onChangeText={description => setDescription(description)} style={[globalStyles.input, {height: 200}]} placeholder="Descrizione evento">{description}</TextInput>
                 <View style={globalStyles.rigaTitoli}>
                     <Text style ={{marginLeft: 20}}></Text>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Dettagli rapidi</Text>
@@ -345,7 +386,7 @@ export default function Home({ navigation }) {
                         <AntDesign name="questioncircleo" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
-                    <TextInput onChangeText={dettagli => seteventDetails(dettagli)} style={globalStyles.input} placeholder="Inserisci i dettagli separati da una virgola (es Drink gratis)"></TextInput>
+                    <TextInput onChangeText={dettagli => seteventDetails(dettagli)} style={globalStyles.input} placeholder="Inserisci i dettagli separati da una virgola (es Drink gratis)">{eventDetails}</TextInput>
                 
                 {/* <View style={globalStyles.rigaTitoli}>
                     <Text style ={{marginLeft: 20}}></Text>
@@ -370,13 +411,13 @@ export default function Home({ navigation }) {
                 <View style={globalStyles.row}>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Data inizio evento</Text>
                     <TouchableOpacity style={[globalStyles.input, globalStyles.selettorePiccolo, {marginBottom: 0, marginTop: 0}]}  onPress={() => gestisciCalendario("startDate")}>
-                        <Text style={{ alignSelf: 'center'}}>{data}</Text>
+                        <Text style={{ alignSelf: 'center'}}>{startDate}</Text>
                     </TouchableOpacity>
                 </View>
                 {/*orarii evento */}
                 <View style={globalStyles.row}>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Orario inizio</Text>
-                    <TextInput onChangeText={time => setstartHour(time)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="20:00"></TextInput>
+                    <TextInput onChangeText={time => setstartHour(time)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="20:00">{startHour}</TextInput>
                 </View>
                 {/*selettore date*/}
                 <View style={globalStyles.row}>
@@ -387,7 +428,7 @@ export default function Home({ navigation }) {
                 </View>
                 <View style={globalStyles.row}>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Orario fine</Text>
-                    <TextInput onChangeText={time => setendHour(time)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="20:00"></TextInput>
+                    <TextInput onChangeText={time => setendHour(time)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="20:00">{endHour}</TextInput>
                 </View>
                 {/**calendario */}
                 <Modal animationType='slide' visible={apriCalendario}>
@@ -418,7 +459,7 @@ export default function Home({ navigation }) {
                                     <Text style={{ fontWeight: 'bold', fontSize: 20}}>Si ripete ogni: </Text>
                                 </View>
                                 <View>
-                                    <DropDown onValueChange={handleDropdownChange} data={eventTypes} />
+                                    <DropDown onValueChange={handleDropdownChange} data={dateRipetizioni} />
                                 </View>
                             </View>
                             <View style={globalStyles.row}>
@@ -446,12 +487,12 @@ export default function Home({ navigation }) {
                 {/*eta evento */}
                 <View style={globalStyles.row}>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Età evento</Text>
-                    <TextInput keyboardType="numeric" onChangeText={eta => seteventAge(eta)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="0+"></TextInput>
+                    <TextInput keyboardType="numeric" onChangeText={eta => seteventAge(eta)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="0+">{eventAge}</TextInput>
                 </View>
                 {/*prezzo evento */}
                 <View style={globalStyles.row}>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 20}]}>Costo entrata</Text>
-                    <TextInput keyboardType="numeric" onChangeText={costo => seteventCost(costo)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="0€"></TextInput>
+                    <TextInput keyboardType="numeric" onChangeText={costo => seteventCost(costo)} style={[globalStyles.input, globalStyles.selettorePiccolo]} placeholder="0€">{eventCost}</TextInput>
                 </View>
                 {/*checkbox evento collegato al local*/}
                 {/*<View style={globalStyles.row}>
@@ -466,8 +507,8 @@ export default function Home({ navigation }) {
                     </View>
                 </View>*/}
                 {/*pubblica l'evento */}
-                <TouchableOpacity style={[globalStyles.button, {marginTop: 15}]} onPress={salvaEvento}>
-                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Pubblica il tuo evento</Text>
+                <TouchableOpacity style={[globalStyles.button, {marginTop: 15}]} onPress={duplicaEvento}>
+                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Crea il tuo evento</Text>
                 </TouchableOpacity>
             </View>
         </View>
