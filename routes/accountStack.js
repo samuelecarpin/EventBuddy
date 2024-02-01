@@ -6,11 +6,13 @@ import eventoPersonaleSingolo from '../screens/eventoPersonaleSingolo.js';
 import eventiVisitati from '../screens/eventiVisitati.js';
 import eventiCreati from '../screens/eventiCreati.js'
 import login from '../screens/login.js';
+import informazioniPersonali from '../screens/infoPersonali.js';
 import registrazione from '../screens/registrazione.js';
 import confermaRegistrazione from '../screens/confermaRegistrazione.js';
 import modificaEvento from '../screens/modificaEvento.js';
 import duplicaEvento from '../screens/duplicaEvento.js';
 import waitingPage from '../screens/waitingPage.js';
+import linkSocial from '../screens/linkSocial.js';
 import eventiInteressanti from '../screens/eventiInteressanti.js';
 
 const screens = {
@@ -35,18 +37,15 @@ const screens = {
     confermaRegistrazione: {
         screen: confermaRegistrazione
     },
-    /*informazioniPersonali: {
+    informazioniPersonali: {
         screen: informazioniPersonali
     },
     linkSocial: {
         screen: linkSocial
-    },*/
+    },
     eventiVisitati: {
         screen: eventiVisitati,
     },
-    /*personaleAssunto: {
-        screen: personaleAssunto
-    },*/
     eventiCreati: {
         screen: eventiCreati,
     },
