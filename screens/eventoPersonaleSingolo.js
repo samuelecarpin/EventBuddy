@@ -12,6 +12,7 @@ import Mappa from '../components/Mappa';
 export default function Home({navigation}) {
   const [socials, setSocials] = useState();
   const [capacity, setCapacity] = useState(null)
+  const [userId, setUserId] = useState('')
   const [like, setLike] = useState(false)
   const [data, setData] = useState(null)
   const [startDate, setStartDate] = useState(null)
@@ -27,8 +28,45 @@ export default function Home({navigation}) {
   }
   const pressHandler = () => {
     navigation.goBack();
+    keyRef = keyRef + 1;
   }
+
+  const handleEmail = () => {
+    Alert.alert('Conferma segnlazione evento', 'Sei sicuro di voler segnalare questo evento ?', [
+      {
+          text: 'Si',
+          onPress: () => {
+            fetch('http://eventbuddy.localhost/api/reportEvent', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "id": navigation.getParam('paramKey'),
+            })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                Alert.alert('Successo', 'Evento segnalato correttamente', [
+                  {
+                      text: 'OK'
+                  },
+                ]) 
+              }
+            });
+
+          }
+      },
+      {
+        text: 'No',
+      },
+  ]);
+  }
+
   const getEvent = async () => {
+
     try {
       const response = await fetch('http://eventbuddy.localhost/api/showSingle/'+navigation.getParam('paramKey'), {
         method: 'GET',
@@ -53,23 +91,24 @@ export default function Home({navigation}) {
           setStartDate(date)
           var date = new Date(data.endDate).toLocaleString();
           setEndDate(date)
+          setUserId(data.user_id)
           setLoading(false);
           setSocials(
             <View style={[globalStyles.infoContainer, globalStyles.row, {paddingLeft: 20, paddingRight: 20}]}>
               <TouchableOpacity disabled={data.facebookLink == null ? true : false } style={{opacity:(data.facebookLink ? 1 : 0.5 )}} onPress={() => apriSocial(data.facebookLink)}>
-                <Entypo name="facebook-with-circle" size={35} color="black" />
+              <FontAwesome5 name="facebook-f" size={27} color="black" />
               </TouchableOpacity>
               <TouchableOpacity disabled={data.instagramLink == null ? true : false } style={{opacity:(data.instagramLink ? 1 : 0.5 )}} onPress={() => apriSocial(data.instagramLink)}>
-                <Entypo name="instagram-with-circle" size={35} color="black" />
+              <FontAwesome5 name="instagram" size={30} color="black" />
               </TouchableOpacity>
               <TouchableOpacity disabled={data.twitterLink == null ? true : false } style={{opacity:(data.twitterLink ? 1 : 0.5 )}} onPress={() => apriSocial(data.twitterLink)}>
-                <Entypo name="twitter-with-circle" size={35} color="black" />
+                <FontAwesome5 name="tiktok" size={27} color="black" />
               </TouchableOpacity>
               <TouchableOpacity disabled={data.youtubeLink == null ? true : false } style={{opacity:(data.youtubeLink ? 1 : 0.5 )}} onPress={() => apriSocial(data.youtubeLink)}>
-                <Entypo name="youtube-with-circle" size={35} color="black" />
+              <FontAwesome5 name="youtube" size={27} color="black" />
               </TouchableOpacity>
               <TouchableOpacity disabled={data.website == null ? true : false } style={{opacity:(data.website ? 1 : 0.5 )}} onPress={() => apriSocial(data.website)}>
-                <Entypo name="network" size={35} color="black" />
+                <Entypo name="network" size={30} color="black" />
               </TouchableOpacity>
             </View>
           )
@@ -79,21 +118,6 @@ export default function Home({navigation}) {
     }
   };
 
-  function findTime(time) {
-      if (time.split(" ")[2] == "PM") {
-        if(time.split(" ")[1] == "12") {
-          return time.split(" ")[1].slice(0, -3)
-        } else {
-          return parseInt(time.split(" ")[1].split(":")[0]) + 12 + ":" + time.split(" ")[1].split(":")[1]
-        }
-      } else {
-        
-        if(time.split(" ")[1].split(":")[0] == "12") {
-          return parseInt(time.split(" ")[1].split(":")[0]) - 12 + ":" + time.split(" ")[1].split(":")[1]
-        }  
-          return time.split(" ")[1].slice(0, -3)
-      }
-  }
 
   function eventLike () {
     if (value) {
@@ -186,6 +210,12 @@ export default function Home({navigation}) {
         SUPPORTED && Linking.openURL(social);
       })
     }
+
+    function navigateAccount() {
+      navigation.navigate('accountInterface', {
+        paramKey: userId,
+      })
+    }
     
     return(
       // safearea X non intralciare con date e robe
@@ -209,7 +239,7 @@ export default function Home({navigation}) {
               </View>
               {/*data e ora*/}
               <View style={[globalStyles.dettagliCopertinaEvento, {alignContent:'center'}]}>
-                <Text style={globalStyles.panoramicaEvento}>{startDate != null ? startDate.split(",")[0]: ''} {startDate != null ? findTime(startDate): ''} - {endDate != null ? endDate.split(",")[0]: ''} {endDate != null ? findTime(endDate): ''}</Text>
+                <Text style={globalStyles.panoramicaEvento}>{startDate != null ? startDate.split(",")[0]: ''} {startDate != null ? startDate.split(" ")[1].slice(0,-3): ''} - {endDate != null ? endDate.split(",")[0]: ''} {endDate != null ? endDate.split(" ")[1].slice(0,-3): ''}</Text>
               </View>
               </LinearGradient>
             </ImageBackground>
@@ -231,10 +261,11 @@ export default function Home({navigation}) {
               }
               </TouchableOpacity>
             <View style={[globalStyles.infoContainer, {marginTop: 0,  marginBottom: 30}]}>
-              <Text style={{ fontWeight: '700', fontSize: 18}}>Creato da: {data != null ? data.username: ''}</Text>
-              <Text style={{ fontWeight: '700', fontSize: 18}}>Costo: {data != null ? data.price: ''} €</Text>
-              <Text style={{ fontWeight: '700', fontSize: 18}}>Età minima: {data != null ? data.minimumAge: ''} anni</Text>
-              <Text style={{ fontWeight: '700', fontSize: 18}}>{capacity}</Text>
+              <TouchableOpacity onPress={navigateAccount}><Text style={{ fontWeight: '700', fontSize: 18, marginVertical: 3}}>Creato da: {data != null ? data.username: ''}</Text></TouchableOpacity>
+              <Text style={{ fontWeight: '700', fontSize: 18, marginVertical: 3}}>Tipologia evento: {data != null ? data.eventType == "private" ? "privato" : "pubblico" : ''}</Text>
+              <Text style={{ fontWeight: '700', fontSize: 18, marginVertical: 3}}>Costo: {data != null ? data.price: ''} €</Text>
+              <Text style={{ fontWeight: '700', fontSize: 18, marginVertical: 3}}>Età minima: {data != null ? data.minimumAge: ''} anni</Text>
+              <Text style={{ fontWeight: '700', fontSize: 18, marginVertical: 3}}>{capacity}</Text>
             </View>
             {/*direzioni */}
             <TouchableOpacity onPress={() => openMaps(mapRegion.latitude, mapRegion.longitude)} style={[globalStyles.infoContainer, {alignItems: 'center', marginTop: 0}]} >
@@ -261,6 +292,9 @@ export default function Home({navigation}) {
             </View> */}
             {/*social */}
             {socials}
+
+            <Text onPress={handleEmail} style={{marginBottom: 20, color: '#e82e41', fontSize: 15, textDecorationLine: 'underline'}}>Segnala l'evento</Text>
+
           </View>
       </View>
     </ScrollView>

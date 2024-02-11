@@ -1,53 +1,115 @@
 
 
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, TextInput, Alert, ScrollView, Modal, Button } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { LinearGradient } from 'expo-linear-gradient';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import Checkbox from 'expo-checkbox';
 import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
-import DropDown from '../components/DropDown';
 
 
 export default function Home({ navigation }) {
 
-  const goBack = () => {
-    navigation.goBack();
+  const [apriCalendario, setapriCalendario] = useState(false)
+  const [dataFineEvento, setDataFineEvento] = useState('GG-MM-AAAA')
+
+  const dataOdierna = new Date();
+  const dataPartenza = getFormatedDate(dataOdierna.setDate(dataOdierna.getDate()), 'YYYY/MM/DD')
+
+  function privateFilter (query, filter){
+    privateEvent = !privateEvent;
+    publicEvent = false;
+    minAge = 0;
+    minDate = "";
+    maxPrice = 0;
+    maxDist = 0;
+    forceUpdateKey = !forceUpdateKey;
+    filter = privateEvent == true ? "filter" : "all";
+    navigation.navigate('home',
+      { filterQuery: query, function: filter }
+    );
   };
+
+  function updateArea() {
+
+    forceUpdateKey = !forceUpdateKey;
+    navigation.navigate('home',
+      { function: "all" }
+    );
+  }
+
+  function publicFilter (query, filter){
+    privateEvent = false;
+    publicEvent = !publicEvent;
+    minAge = 0;
+    minDate = "";
+    maxPrice = 0;
+    maxDist = 0;
+    forceUpdateKey = !forceUpdateKey;
+    filter = publicEvent == true ? "filter" : "all";
+    navigation.navigate('home',
+      { filterQuery: query, function: filter }
+    );
+  };
+
+  function goBack () {
+    navigation.goBack();
+  }
 
   function gestisciCalendario() {
     setapriCalendario(!apriCalendario);
   };
 
-  const pressHandler = () => {
-    navigation.goBack();
-  };
-  
-  function cambioData(propDate) {
 
-        setData(propDate);
-  };
+  function minDateFilter (propDate) {
+    privateEvent = false;
+    publicEvent = false;
+    minAge = 0;
+    minDate = propDate;
+    maxPrice = 0;
+    maxDist = 0;
+    forceUpdateKey = !forceUpdateKey;
+    filter = minDate != "" ? "filter" : "all";
+    navigation.navigate('home',
+      { filterQuery: "startDate,>=,"+minDate, function: filter }
+    );
+  }
 
-
-  const [apriCalendario, setapriCalendario] = useState(false)
-  const [data, setData] = useState('GG-MM-AAAA')
-  const [dataFineEvento, setDataFineEvento] = useState('GG-MM-AAAA')
-
-  const dataOdierna = new Date();
-  const dataPartenza = getFormatedDate(dataOdierna.setDate(dataOdierna.getDate()), 'YYYY/MM/DD')
-  
-  var dateRipetizioni = [
-    {label:'Giorno', value:'1'},
-    {label:'Settimana', value:'2'},
-    {label:'Mese', value:'3'},
-  ]
+  function minAgeFilter(type) {
+    if (type == "delete") {
+      minAge = 0
+    }
+    privateEvent = false;
+    publicEvent = false;
+    minDate = "";
+    maxPrice = 0;
+    maxDist = 0;
+    forceUpdateKey = !forceUpdateKey;
+    filter = minAge != 0 ? "filter" : "all";
+    navigation.navigate('home',
+      { filterQuery: "minimumAge,>=,"+minAge, function: filter }
+    );
+  }
+  function maxPriceFilter(type){
+    if (type == "delete") {
+      maxPrice = 0
+    }
+    privateEvent = false;
+    publicEvent = false;
+    minAge = 0;
+    minDate = "";
+    maxDist = 0;
+    forceUpdateKey = !forceUpdateKey;
+    filter = maxPrice != 0 ? "filter" : "all";
+    navigation.navigate('home',
+      { filterQuery: "price,<=,"+maxPrice, function: filter }
+    );
+  }
 
   return (
-    <View style={[{ flex: 1, backgroundColor: '#FFF', paddingBottom: 50}]}>
-    <View style={[ globalStyles.FormContainer2, {height:"90%"}]}>
+    <ScrollView style={[{ flex: 1, backgroundColor: '#FFF'}]}>
+    <View style={[ globalStyles.FormContainer2]}>
     <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
     <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
                   <TouchableOpacity onPress={goBack}>
@@ -58,41 +120,52 @@ export default function Home({ navigation }) {
                       <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
                   </TouchableOpacity>
               </View>
-    <Text style={{ fontWeight: 'bold', fontSize: 20}} >Ordina per:</Text>
-    <TouchableOpacity style={globalStyles.button2} >
-    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>I più vicini</Text>
+    <Text style={{ fontWeight: 'bold', fontSize: 20}} >Filtra per:</Text>
+    <TouchableOpacity onPress={() => privateFilter("eventType,=,private", "filter")} style={globalStyles.button2} >
+    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 17}]}>Evento privato {privateEvent == true ? <Feather name="check" size={24} color="white" /> : ""}</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={globalStyles.button2} >
-    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>I più popolari</Text>
+    <TouchableOpacity onPress={() => publicFilter("eventType,=,public", "filter")} style={globalStyles.button2} >
+    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 17}]}>Evento pubblico {publicEvent == true ? <Feather name="check" size={24} color="white" /> : ""}</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={globalStyles.button2} >
-    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Eventi speciali</Text>
-    </TouchableOpacity>
-
-    <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop:30}} >Seleziona la data:</Text>
-    <TouchableOpacity style={[globalStyles.input, globalStyles.selettorePiccolo, {marginBottom: 0, marginTop: 10}]} onPress={gestisciCalendario}>
-                    <Text style={{ alignSelf: 'center'}}>{data}</Text>
-    </TouchableOpacity>
+    <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >A partire dalla data:</Text>
+      <TouchableOpacity style={[globalStyles.input, globalStyles.selettorePiccolo, {marginBottom: 0, marginTop: 10}]} onPress={gestisciCalendario}>
+        <Text style={{ alignSelf: 'center'}}>{minDate}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => minDateFilter("")}>
+        <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color={minDate != "" ? "black" : "white"}/>
+      </TouchableOpacity>
             <Modal animationType='slide' visible={apriCalendario}>
             <View style={globalStyles.vistaCentrata}>
                 <View style={globalStyles.vistaCalendario}>
-                    <DatePicker mode='datepicker' selected={dataFineEvento == false ? data : dataFineEvento} onDateChange={cambioData} minimumDate={dataPartenza} />
-                    <TouchableOpacity onPress={gestisciCalendario} >
-                        <AntDesign name="closecircleo" size={24} color="black" />
-                    </TouchableOpacity>
+                    <DatePicker mode='calendar' selected={dataFineEvento == false ? minDate : dataFineEvento} onDateChange={minDateFilter} minimumDate={dataPartenza} />
+                    
                 </View>
-            </View>
+            </View> 
             </Modal>
-            <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop:30}} >Età:</Text>
-            <View style={{alignItems:"center"}}>
-            <TextInput style={[globalStyles.input, globalStyles.selettorePiccolo, {marginTop:10}]} placeholder="16+"></TextInput>
+      <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >Età minima:</Text>
+          <View style={{alignItems:"center"}}>
+            <TextInput onChangeText={text => minAge = text} style={[globalStyles.input, globalStyles.selettorePiccolo, {marginTop:10}]} onSubmitEditing={minAgeFilter} returnKeyType="done" placeholder="16+" keyboardType='numeric'>{minAge}</TextInput>
+          </View>
+        <TouchableOpacity onPress={() => minAgeFilter("delete")}>
+          <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color={minAge != 0 ? "black" : "white"}/>
+        </TouchableOpacity>
+          <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >Prezzo massimo:</Text>
+          <View style={{alignItems:"center"}}>
+          <TextInput onChangeText={text => maxPrice = text} style={[globalStyles.input, globalStyles.selettorePiccolo, {marginTop:10}]} onSubmitEditing={maxPriceFilter} returnKeyType="done" placeholder="16+" keyboardType='number-pad'>{maxPrice}</TextInput>
+            </View>
+          <TouchableOpacity onPress={() => maxPriceFilter("delete")}>
+            <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color={maxPrice != "" ? "black" : "white"}/>
+          </TouchableOpacity>
+          <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >Area di copoertura (in Km):</Text>
+          <View style={{alignItems:"center"}}>
+          <TextInput onChangeText={text => area = text} style={[globalStyles.input, globalStyles.selettorePiccolo, {marginTop:10}]} onSubmitEditing={updateArea} returnKeyType="done" placeholder="150" keyboardType='number-pad'>{area}</TextInput>
             </View>
     </View>
-            <View style={[ globalStyles.FormContainer2]}>
-                    <TouchableOpacity style={globalStyles.button}>
+            {/* <View style={[ globalStyles.FormContainer2, {paddingBottom: 20}]}>
+                  <TouchableOpacity style={globalStyles.button}>
                     <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Invia</Text>
-                    </TouchableOpacity>
-            </View> 
-</View>
+                  </TouchableOpacity>
+            </View>  */}
+</ScrollView>
   );
 };

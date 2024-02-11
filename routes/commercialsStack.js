@@ -2,6 +2,7 @@ import { createStackNavigator} from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import locali from '../screens/locali.js';
 import creaEvento from '../screens/creaEvento';
+import accountInterface from '../screens/accountInterface.js';
 
 const screens = {
     locali: {
@@ -10,6 +11,9 @@ const screens = {
     creaEvento: {
         screen: creaEvento
     },
+    accountInterface: {
+        screen: accountInterface
+    }
 }
 
 const HomeStack = createStackNavigator(screens, {

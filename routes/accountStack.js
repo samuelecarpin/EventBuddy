@@ -14,6 +14,11 @@ import duplicaEvento from '../screens/duplicaEvento.js';
 import waitingPage from '../screens/waitingPage.js';
 import linkSocial from '../screens/linkSocial.js';
 import eventiInteressanti from '../screens/eventiInteressanti.js';
+import eliminaAccount from '../screens/eliminaAccount.js';
+import resetPassword from '../screens/resetPassword.js'
+import resetPasswordContinua from '../screens/resetPasswordContinua.js'
+import accountInterface from '../screens/accountInterface.js';
+import accountInterfacePersonal from '../screens/accountInterfacePersonal.js'
 
 const screens = {
     waitingPage: {
@@ -25,11 +30,17 @@ const screens = {
             gestureEnabled: false,
         }
     },
-    account: {
-        screen: account,
+    accountInterfacePersonal: {
+        screen: accountInterfacePersonal,
         navigationOptions: {
             gestureEnabled: false,
         }
+    },
+    accountInterface: {
+        screen: accountInterface,
+    },
+    account: {
+        screen: account,
     },
     registrazione: {
         screen: registrazione
@@ -49,17 +60,17 @@ const screens = {
     eventiCreati: {
         screen: eventiCreati,
     },
-    /*localiPersonali: {
-        screen: localiPersonali
-    },
     resetPassword: {
         screen: resetPassword
     },
     eliminaAccount: {
         screen: eliminaAccount
-    },*/
+    },
     eventoPersonaleSingolo: {
-        screen: eventoPersonaleSingolo
+        screen: eventoPersonaleSingolo,
+        navigationOptions: {
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
+        }
     },
     eventiInteressanti: {
         screen: eventiInteressanti
@@ -70,7 +81,9 @@ const screens = {
     duplicaEvento: {
         screen: duplicaEvento
     },
-
+    resetPasswordContinua: {
+        screen: resetPasswordContinua
+    }
 }
 
 const AccountStack = createStackNavigator(screens, {

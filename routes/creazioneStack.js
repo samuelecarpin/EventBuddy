@@ -2,14 +2,18 @@ import { createStackNavigator, TransitionSpecs, HeaderStyleInterpolators} from '
 import { createAppContainer } from 'react-navigation';
 import paginaCrea from '../screens/paginaCrea';
 import creaEvento from '../screens/creaEvento';
+import login from '../screens/login';
 
 const screens = {
     paginaCrea: {
-        screen: paginaCrea
+        screen: paginaCrea,
     },
     creaEvento: {
         screen: creaEvento
     },
+    login: {
+        screen: login
+    }
 }
 
 const HomeStack = createStackNavigator(screens, {

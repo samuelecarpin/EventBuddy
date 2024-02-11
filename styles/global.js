@@ -4,8 +4,23 @@ var widthScreen = Dimensions.get('window').width; //full width
 var heightScreen = Dimensions.get('window').height; //full height
 var buttonsHeight = 50;
 var buttonsWidth = widthScreen-40;
-var buttonsWidth2 = widthScreen-200;
-
+var buttonsWidth2 = 200;
+{/**Variabili globali */}
+global.linkFotoBarman = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/barman.jpg?alt=media&token=ee24c4e8-6696-4d0b-ba0a-72d3bd759337';
+global.linkFotoSicurezza = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/addettoSicurezza.jpg?alt=media&token=fe8016f4-bd95-4888-920f-ddd1c52f9caf';
+global.linkFotoFotografo = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/fotografo2.jpg?alt=media&token=ceae646a-21b5-409f-ab7b-5adcc8e2a847';
+global.linkFotoArtista = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/artista.jpg?alt=media&token=6a1feed9-a090-4139-a11f-b84800578799';
+global.linkFotoCuoco = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/cuoco.jpg?alt=media&token=34d4004c-9438-4ad9-9613-2b0dec9a0a75';
+global.linkFotoPulizie = 'https://firebasestorage.googleapis.com/v0/b/startup-f5f25.appspot.com/o/pulizia.jpg?alt=media&token=b9e07ce1-6638-4bb2-9627-12337ecfcb4e';
+global.privateEvent = false;
+global.publicEvent = false;
+global.minAge = 0;
+global.minDate = "";
+global.maxPrice = 0;
+global.maxDist = 0;
+global.forceUpdateKey = false;
+global.area = 150;
+global.keyRef = 0;
 export const globalStyles = StyleSheet.create({
     container: {
       flex: 1,
@@ -35,11 +50,13 @@ export const globalStyles = StyleSheet.create({
     },
     FormContainer: {
       display: 'flex',
+      flex: 8,
       alignItems: 'center',
+      paddingTop: 20,
     },
     tinyLogo: {
-      width: 100,
-      height: 100,
+      width: 250,
+      height: 250,
     },
     button: {
       alignItems: 'center',
@@ -51,6 +68,10 @@ export const globalStyles = StyleSheet.create({
     },
     whiteText: {
       color: 'white',
+    },
+    error: {
+      borderColor: '#ff5b4f',
+      borderWidth: 1
     },
     input: {
       width: buttonsWidth,
@@ -99,7 +120,7 @@ export const globalStyles = StyleSheet.create({
       borderWidth: 1,   
       borderRadius: 30,
     },
-    viewImmagineCopertina: {
+  /*viewImmagineCopertina: {
       width: widthScreen,
       height: widthScreen*2/3.2 + 10,
     },
@@ -107,6 +128,22 @@ export const globalStyles = StyleSheet.create({
       // remove width and height to override fixed static size
       width: widthScreen,
       height: widthScreen*2/3.2,
+      justifyContent: 'center',
+      borderBottomLeftRadius: 40,
+      borderBottomRightRadius: 40,
+      overflow: "hidden",
+      paddingTop: 10,
+    },*/
+    viewImmagineCopertina: {
+      width: widthScreen,
+      //height: widthScreen*2/3.2 + 10,
+      height: widthScreen + 10
+    },
+    immagineCopertina: {
+      // remove width and height to override fixed static size
+      width: widthScreen,
+      //height: widthScreen*2/3.2,
+      height: widthScreen,
       justifyContent: 'center',
       borderBottomLeftRadius: 40,
       borderBottomRightRadius: 40,
@@ -132,11 +169,13 @@ export const globalStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       flex: 2,
+      paddingHorizontal: 25
     },
     nomeEvento: {
       fontSize: 30,
       color: 'white',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      textAlign: 'center'
     },
     condividiEvento: {
       width: 30,
@@ -145,7 +184,8 @@ export const globalStyles = StyleSheet.create({
     panoramicaEvento: {
       fontSize: 17,
       color: 'white',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      textAlign: 'center'
     },
     row: {
       marginTop: 15,
@@ -168,8 +208,18 @@ export const globalStyles = StyleSheet.create({
     },
     mapContainer: {
       width: widthScreen-50,
-      height: heightScreen*3/10,
+      height: widthScreen*1.1,
       overflow:"hidden",
+      borderRadius: 30,
+    },
+    immagineAccount: {
+      backgroundColor: '#f7f7f7',
+      borderRadius: 500,
+      width: widthScreen/2,
+      height: widthScreen/2
+    },
+    searchContainer: {
+      width: widthScreen-50,
       borderRadius: 30,
     },
     selettorePiccolo: {
@@ -256,11 +306,12 @@ export const globalStyles = StyleSheet.create({
       padding: 10,
       height:50,
       marginVertical: 10,
+      marginBottom: 20,
       flexDirection: 'row',
       justifyContent: "center",
       alignContent: "center",
       alignItems: "center",
-      backgroundColor:"#F7F7F7",
+      //backgroundColor:"#F7F7F7",
       marginRight: "15%",
       marginLeft: "15%",
       borderRadius: 40,
@@ -276,12 +327,12 @@ export const globalStyles = StyleSheet.create({
       height: 40,
       borderColor: 'gray',
       borderRadius:40,
-      backgroundColor:"#FFF",
+      backgroundColor:"#F7F7F7",
       paddingHorizontal: 10,
       textAlign: 'center', // Centra il testo orizzontalmente
       alignItems: 'center', // Centra il testo verticalmente
     },
-    testoEventiVicini: {
+  	/*testoEventiVicini: {
       flex: 1,
       justifyContent: "center",
       alignContent: "center",
@@ -296,6 +347,28 @@ export const globalStyles = StyleSheet.create({
       overflow: 'hidden',
     },
     backgroundImageCardEventi: {
+      resizeMode: 'cover',
+      justifyContent: 'center',
+    },*/
+    testoEventiVicini: {
+      flex: 1,
+      justifyContent: "center",
+      alignContent: "center",
+      marginTop: 15,
+      marginBottom: 15
+    },
+    containerCardEventi: {
+      width: widthScreen-50,
+      height:widthScreen*7/10,
+      marginTop:10,
+      marginBottom: 10,
+      marginHorizontal:10,
+      flex: 1,
+      borderRadius: 40,
+      overflow: 'hidden',
+    },
+    backgroundImageCardEventi: {
+      flex: 1,
       resizeMode: 'cover',
       justifyContent: 'center',
     },
@@ -313,7 +386,7 @@ export const globalStyles = StyleSheet.create({
       textAlign: 'center',
     },
     sottotitoloCardEventi: {
-      marginTop:"5%",
+      marginTop: 10,
       fontSize: 18,
       color: 'white',
       textAlign: 'center',
@@ -345,6 +418,10 @@ export const globalStyles = StyleSheet.create({
       width: '90%',
       borderBottomColor: '#e7e7e7',
       borderBottomWidth: 2
+    },
+    safeArea: {
+      height: 50,
+      backgroundColor: 'white'
     },
     bottoniInBasso: {
       marginTop:400,
@@ -415,6 +492,7 @@ export const globalStyles = StyleSheet.create({
       marginTop:20,
       width: 200,
       height: 200,
+      backgroundColor: '#f7f7f7',
       borderRadius: 100,  // Per ottenere un'immagine rotonda, imposta il bordo a metà dell'altezza/larghezza
     },
     userInfoACC: {
@@ -429,7 +507,7 @@ export const globalStyles = StyleSheet.create({
       justifyContent: "center",
       alignContent: "center",
       textAlign: "center",
-      backgroundColor: '#F7F7F7',
+
       height: 50,
       width: 50,
       borderRadius: 100,
@@ -444,5 +522,31 @@ export const globalStyles = StyleSheet.create({
       height: buttonsHeight,
       borderRadius: 30,
     },
+    containterEvent: {
+      width: widthScreen-50,
+      height:300,
+      marginTop:10,
+      marginHorizontal:10,
+      borderRadius: 40,
+      overflow: 'hidden'
+    },
+    containerPhotoEvent: {
+      height: widthScreen*7/10,
+      borderTopLeftRadius: 40,
+      borderTopRightRadius: 40,
+      zIndex:1,
+      /*borderBottomRightRadius: -40,
+      borderBottomLeftRadius: -40,*/
+      overflow: 'hidden'
+    },
+    containerTitleEvent: {
+      zIndex: -1,
+      marginTop:"-10%",
+      height:130,
+      borderBottomLeftRadius: 40,
+      borderBottomRightRadius: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f7f7f7',
+    }
   });
-  

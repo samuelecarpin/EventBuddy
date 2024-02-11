@@ -13,8 +13,8 @@ export default function login({navigation}) {
     async function getValueFor(key) {
         const keyResp = await SecureStore.getItemAsync(key);
         if (keyResp) {
-            // setError(false);
-            // navigation.navigate('creaEvento');
+            setError(false);
+            navigation.navigate('creaEvento');
             chechToken(keyResp);
         } else {
             setError(true);

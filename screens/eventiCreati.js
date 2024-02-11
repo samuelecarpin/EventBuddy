@@ -138,7 +138,7 @@ export default function Home({navigation}) {
                <View style={globalStyles.contentContainerCardEventi}>
                  <Text style={[globalStyles.titoloCardEventi, {paddingHorizontal: 10}]}>{data[i].name}</Text>
                  <Text style={globalStyles.sottotitoloCardEventi}>
-                  {/* Fine: {data[i].endDate} {findTime(data[i].endDate)} */}
+                    Inizia il: {new Date(data[i].startDate).toLocaleString().split(",")[0]} {new Date(data[i].startDate).toLocaleString().split(" ")[1].slice(0,-3)}
                  </Text>
                </View>
              </TouchableOpacity>

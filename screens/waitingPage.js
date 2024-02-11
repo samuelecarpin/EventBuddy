@@ -1,12 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, ActivityIndicator} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 export default function login({navigation}) {
-    const [email, setEmail] = useState('11@2.3')
-  const [password, setPassword] = useState('12345678')
   const [key, setKey] = React.useState('userToken');
-  const [credentialsError, setCredentialsError] = useState(false)
   const [verificationError, setVerificationError] = useState(false) 
 
   async function getValueFor(key) {
@@ -19,7 +16,9 @@ export default function login({navigation}) {
       }
   }
 
-  getValueFor(key);
+  useEffect(() => {
+      getValueFor(key)
+  });
 
   const chechToken = (token) => {
     fetch('http://eventbuddy.localhost/api/get_user', {
@@ -35,7 +34,7 @@ export default function login({navigation}) {
           if(data.user) {
             if(data.user.email_verified_at != null) {
               setVerificationError(false);
-              navigation.navigate("account");
+              navigation.navigate("accountInterfacePersonal");
               setLoading(false);
             } else {
               setVerificationError(true);

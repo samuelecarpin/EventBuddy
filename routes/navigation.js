@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { globalStyles } from '../styles/global.js';
@@ -73,11 +72,11 @@ const App = () => {
                         },
                         tabBarLabel: 'Crea',
                         tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="pluscircle" size={size} color={color} />
+                            <AntDesign name="pluscircle" size={size} color={color} />
                         ),
                     }}
                 />
-                <Tab.Screen name="Personale" component={PersonaleScreen} 
+                {/* <Tab.Screen name="Personale" component={PersonaleScreen} 
                     options={{
                         tabBarShowLabel: false,
                         tabBarStyle: {
@@ -91,7 +90,7 @@ const App = () => {
                         <Ionicons name="people-sharp" size={size} color={color} />
                         ),
                     }}
-                />
+                /> */}
                 <Tab.Screen name="Account" component={AccountScreen}
                     options={{
                         tabBarShowLabel: false,

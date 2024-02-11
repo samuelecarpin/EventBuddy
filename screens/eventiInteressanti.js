@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView, Alert, ActivityIndicator, Image, TouchableOpacity} from 'react-native'; 
 import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons'; 
-import { Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
 export default function Home({navigation}) { 
@@ -14,7 +13,6 @@ export default function Home({navigation}) {
   const [value, setValue] = React.useState('');
   const [loading, setLoading] = useState(true);
   const today = new Date();
-  getValueFor(key)
   
     async function getValueFor(key) {
         setValue(await SecureStore.getItemAsync(key));
@@ -29,49 +27,6 @@ export default function Home({navigation}) {
     })
   };
 
-  function modificaEvento(id) {
-    navigation.navigate('modificaEvento', {
-      paramKey: id,
-    })
-  };
-
-  function duplicaEvento(id) {
-    navigation.navigate('duplicaEvento', {
-      paramKey: id,
-    })
-  };
-
-  function eliminaEvento(id) {
-    Alert.alert('Elimina evento', 'Sei sicuro di voler eliminare l\'evento ?', [
-      {
-        text: 'No',
-      },
-      {
-        text: 'Si voglio eliminarlo',
-        style: 'destructive',
-        onPress: () => 
-        fetch('http://eventbuddy.localhost/api/delete/'+id, {
-        method: 'DELETE',
-        headers: {
-            Authorization: 'Bearer '+ value
-        },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-              Alert.alert('Successo', 'L\'evento è stato eliminato con successo', [
-                {
-                    text: 'OK'
-                },
-            ]);
-              setEvents([])
-              getUserEvents()
-            }
-          })
-      },
-    ]);
-  };
-
   function findTime(time) {
     if (time.split(" ")[2] == "PM") {
       if(time.split(" ")[1] == "12") {
@@ -80,7 +35,6 @@ export default function Home({navigation}) {
         return parseInt(time.split(" ")[1].split(":")[0]) + 12 + ":" + time.split(" ")[1].split(":")[1]
       }
     } else {
-      
       if(time.split(" ")[1].split(":")[0] == "12") {
         return parseInt(time.split(" ")[1].split(":")[0]) - 12 + ":" + time.split(" ")[1].split(":")[1]
 
@@ -105,6 +59,7 @@ export default function Home({navigation}) {
     })
     .then(response => response.json())
     .then(data => {
+
       setHaveValues(true);
       var newEvents = [];
       var oldDates = false;
@@ -120,7 +75,7 @@ export default function Home({navigation}) {
                <View style={globalStyles.contentContainerCardEventi}>
                  <Text style={[globalStyles.titoloCardEventi, {paddingHorizontal: 10}]}>{data[i].name}</Text>
                  <Text style={globalStyles.sottotitoloCardEventi}>
-                  Inizia il: {data[i].startDate} {findTime(data[i].startDate)}
+                 Inizia il: {new Date(data[i].startDate).toLocaleString().split(",")[0]} {new Date(data[i].startDate).toLocaleString().split(" ")[1].slice(0,-3)}
                  </Text>
                </View>
              </TouchableOpacity>
@@ -137,6 +92,7 @@ export default function Home({navigation}) {
 
     useEffect(() => {
       if (haveValues === false) {
+        getValueFor(key)
         getUserEvents();
       }
       

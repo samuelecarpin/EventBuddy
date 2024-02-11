@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, Text, Alert, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
+import {View, Image, Text, Alert, TouchableOpacity, SafeAreaView, ScrollView, RefreshControl} from 'react-native';
 import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { Octicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
 
@@ -14,10 +15,20 @@ export default function login({navigation}) {
     const [rimuoviTitolo, setrimuoviTitolo] = useState(true)
     const [key, setKey] = React.useState('userToken');
     const [value, setValue] = React.useState('');
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getValueFor(key)
+        getUserData();
+        setTimeout(() => {
+            setRefreshing(false);
+          }, 2000);
+    }, []);
     async function getValueFor(key) {
         setValue(await SecureStore.getItemAsync(key));
         if (value) {
-            console.log("🔐 Here's your value 🔐 \n" + value);
+            console.log("🔐 Here's your value 🔐 \n" + value);    
         }
     }
 
@@ -26,7 +37,6 @@ export default function login({navigation}) {
     }
 
     const logOut = async() => {
-        navigation.navigate('login')
         fetch('http://eventbuddy.localhost/api/logout', {
         method: 'GET',
         headers: {
@@ -39,6 +49,7 @@ export default function login({navigation}) {
         .then(data => {
             if (data.success == true) {
                 saveValue(key, '')
+                navigation.navigate('login')
             }
             
         })
@@ -52,7 +63,6 @@ export default function login({navigation}) {
         quality: 1,
         });
         setrimuoviTitolo(false);
-        setImmagineBack({uri: result.assets[0].uri})
         var formData = new FormData();
         formData.append('image', {
             uri: result.assets[0].uri,
@@ -69,6 +79,7 @@ export default function login({navigation}) {
             .then(response => response.json())
             .then(data => {
                 if (data.success == true) {
+                    setImmagineBack({uri: result.assets[0].uri})
                     Alert.alert('Successo', data.message, [
                         {
                             text: 'OK'
@@ -166,7 +177,6 @@ export default function login({navigation}) {
           getValueFor(key)
           getUserData();
         }
-        
     });
 
     const eventiVisitati = () => {
@@ -175,19 +185,32 @@ export default function login({navigation}) {
     const eventiCreati = () => {
         navigation.navigate('eventiCreati')
     }
+    const linkSocial = () => {
+        navigation.navigate('linkSocial')
+    }
+    const informazioniPersonali = () => {
+        navigation.navigate('informazioniPersonali')
+    }
     const eventiInteressanti = () => {
         navigation.navigate('eventiInteressanti')
     }
+    const resetPassword = () => {
+        navigation.navigate('resetPassword')
+    }
+    const eliminaAccount = () => {
+        navigation.navigate('eliminaAccount')
+    }
+    
 
   return(
     // safearea X non intralciare con date e robe
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF'}}>
-        <ScrollView>
+    <SafeAreaView key={refreshing} style={{ flex: 1, backgroundColor: '#FFF'}}>
+        <ScrollView key={refreshing}  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             <View style={{flex: 1}}>
                 <View style={globalStyles.FormContainer}>
                     <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold'}]}>
-                        <TouchableOpacity>
-                            <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
+                        <TouchableOpacity onPress={() => navigation.navigate('accountInterfacePersonal')}>
+                            <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                         </TouchableOpacity>
                         <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 25}]}>Profilo</Text>
                         <TouchableOpacity>
@@ -215,11 +238,11 @@ export default function login({navigation}) {
                     </View>
                     {/*selettori */}
                     <View style={[globalStyles.infoContainer, {paddingTop: 30}]}>
-                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]}>
+                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]} onPress={informazioniPersonali}>
                             <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 17, padding: 10}]}>Informazioni Personali</Text>
                                 <AntDesign name="right" size={25} color="black" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[[globalStyles.row, globalStyles.infoPersonaliSelettore],]}>
+                        <TouchableOpacity style={[[globalStyles.row, globalStyles.infoPersonaliSelettore],]} onPress={linkSocial}>
                             <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 17, padding: 10}]}>Link ai social</Text>
                                 <AntDesign name="right" size={25} color="black" />
                         </TouchableOpacity>
@@ -239,11 +262,11 @@ export default function login({navigation}) {
                             <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 17, padding: 10}]}>I miei locali</Text>
                                 <AntDesign name="right" size={25} color="black" />
                         </TouchableOpacity> */}
-                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]}>
+                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]} onPress={resetPassword}>
                             <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 17, padding: 10}]}>Reset Password</Text>
                                 <AntDesign name="right" size={25} color="black" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]}>
+                        <TouchableOpacity style={[globalStyles.row, globalStyles.infoPersonaliSelettore]} onPress={eliminaAccount}>
                             <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 17, padding: 10}]}>Elimina Account</Text>
                                 <AntDesign name="right" size={25} color="black" />
                         </TouchableOpacity>

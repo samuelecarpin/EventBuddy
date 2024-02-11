@@ -97,8 +97,7 @@ export default function login({navigation}) {
             console.log(data)
                 if (data.success == true) {
                     navigation.navigate("confermaRegistrazione")
-                } else {
-                    
+                } else { 
                     if (data.errors.name) {
                         setNameError(true)
                     } else {
@@ -214,7 +213,7 @@ export default function login({navigation}) {
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 20}}>Facebook</Text> */}
                         <TextInput onChangeText={facebookLink => setFacebookLink(facebookLink)} style={globalStyles.input} placeholder="Facebook"></TextInput>
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 20}}>Twitter</Text> */}
-                        <TextInput onChangeText={twitterLink => setTwitterLink(twitterLink)} style={globalStyles.input} placeholder="Twitter"></TextInput>
+                        <TextInput onChangeText={twitterLink => setTwitterLink(twitterLink)} style={globalStyles.input} placeholder="TikTok"></TextInput>
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 20}}>Youtube</Text> */}
                         <TextInput onChangeText={youtubeLink => setYoutubeLink(youtubeLink)} style={globalStyles.input} placeholder="Youtube"></TextInput>
                     {/*<View style={globalStyles.caricaDocumenti}>

@@ -3,6 +3,8 @@ import { CardStyleInterpolators } from '@react-navigation/stack';
 import { createAppContainer } from 'react-navigation';
 import home from '../screens/home.js';
 import eventoSingolo from '../screens/eventoPersonaleSingolo.js';
+import accountInterface from '../screens/accountInterface.js';
+import filters from '../screens/filtri.js';
 
 const screens = {
     home: {
@@ -14,6 +16,12 @@ const screens = {
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
         }
     },
+    accountInterface: {
+        screen: accountInterface,
+    },
+    filters: {
+        screen: filters,
+    }
 }
 
 const HomeStack = createStackNavigator(screens, {

@@ -39,12 +39,23 @@ export default function Home({ navigation }) {
     const [endHour, setendHour] = useState(null);
     const dataPartenza = getFormatedDate(dataOdierna.setDate(dataOdierna.getDate()), 'YYYY-MM-DD')
     const [dontHaveLimit, setDontHaveLimit] = useState(false);
-    const [key, setKey] = React.useState('userToken');
     const [value, setValue] = React.useState('');
-    getValueFor(key)
-  
+    const [key, setKey] = React.useState('userToken');
+
     async function getValueFor(key) {
-        setValue(await SecureStore.getItemAsync(key));
+        const keyResp = await SecureStore.getItemAsync(key);
+        if (keyResp) {
+            // setError(false);
+            // navigation.navigate('creaEvento');
+            setValue(keyResp);
+        } else {
+            Alert.alert('Login errato', 'Le credenziali non sono valide', [
+                {
+                    text: 'OK',
+                    onPress: () => navigation.navigate('paginaCrea')
+                },
+            ]);
+        }
     }
 
     const handleDropdownChange = (value) => {
@@ -87,7 +98,7 @@ export default function Home({ navigation }) {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.6,
         });
         setrimuoviTitolo(false);
         setSelectedImage(result.assets[0].uri);
@@ -127,7 +138,7 @@ export default function Home({ navigation }) {
         formData.append('latitude', mapRegion.latitude);
         formData.append('longitude', mapRegion.longitude);
         formData.append('details', eventDetails);
-        selectedImage ? formData.append('image', {
+        selectedImage != null ? formData.append('image', {
             uri: selectedImage,
             name: 'selected.jpg',
             type: 'image/jpeg',
@@ -217,9 +228,10 @@ export default function Home({ navigation }) {
         };
         getPermissions();
       }
-      useEffect(() => {
+    useEffect(() => {
+        getValueFor(key)
         userLocation();
-      }, []);
+    }, []);
 
     const handleEventType = (value) => {
         seteventType(value);
@@ -265,7 +277,7 @@ export default function Home({ navigation }) {
                     <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.7)']} style={globalStyles.viewImmagineCopertina}>
                     <View style={globalStyles.bottoniCopertinaEvento}>
                         <TouchableOpacity onPress={pressHandler}>
-                            <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
+                            <Ionicons style={{opacity: 0}} name="ios-chevron-back-sharp" size={33} color="white" />
                         </TouchableOpacity>
                     </View>
                     {/*testo */}

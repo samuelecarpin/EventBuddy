@@ -14,7 +14,7 @@ export default function Home({navigation}) {
   const [value, setValue] = React.useState('');
   const [loading, setLoading] = useState(true);
   const today = new Date();
-  getValueFor(key)
+  
   
     async function getValueFor(key) {
         setValue(await SecureStore.getItemAsync(key));
@@ -23,11 +23,11 @@ export default function Home({navigation}) {
         }
   }
 
-  function apriEvento(id) {
-    navigation.navigate('eventoPersonaleSingolo', {
+  function apriLocale(id) {
+    navigation.navigate('accountInterface', {
       paramKey: id,
     })
-  };
+  }
 
   function duplicaEvento(id) {
     navigation.navigate('duplicaEvento', {
@@ -55,7 +55,7 @@ export default function Home({navigation}) {
         commercials.push(
              <TouchableOpacity style={[globalStyles.containerCardEventi]}  onPress={() => apriEvento(data[i].id)}>
               <Image
-                source={{uri :'https://mphimplus.com/img/commercial/commercial.jpg'}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                source={{uri : '/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
                 style={globalStyles.backgroundImageCardEventi}
               />
                <View style={globalStyles.contentContainerCardEventi}>
@@ -83,7 +83,7 @@ export default function Home({navigation}) {
       var commercials = [];
       for(let i = 0; i < data.length; i++){
         commercials.push(
-             <TouchableOpacity style={[globalStyles.containerCardEventi]}  onPress={() => apriEvento(data[i].id)}>
+             <TouchableOpacity style={[globalStyles.containerCardEventi]}  onPress={() => apriLocale(data[i].id)}>
               <Image
                 source={{uri : '/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
                 style={globalStyles.backgroundImageCardEventi}
@@ -107,6 +107,7 @@ export default function Home({navigation}) {
 
     useEffect(() => {
       if (haveValues === false) {
+        getValueFor(key)
         getUserEvents();
       }
       
@@ -125,8 +126,10 @@ export default function Home({navigation}) {
         autoCapitalize='none' 
         onChangeText={searchValue => setSearchValue(searchValue)} 
         style={globalStyles.inputCercaHome}
-        placeholder="Cerca un locale..."
+        placeholder="Cerca un locale ..."
+        value={searchValue}
       />
+      <TouchableOpacity onPress={() => setSearchValue("")}><Feather name="x-circle" size={20} color="gray" style={[globalStyles.searchIconCercaHome,{opacity: searchValue == "" ? 0 : 1} ]} /></TouchableOpacity>
       <Feather onPress={searchUsers} name="search" size={24} color="black" style={globalStyles.searchIconCercaHome} />
       </View>
       
