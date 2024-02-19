@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, TextInput, Alert, ScrollView, Modal } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, TextInput, Alert, ScrollView, Modal, KeyboardAvoidingView } from 'react-native';
 import { Marker }  from 'react-native-maps';
 import MapView from 'react-native-maps';
 import { globalStyles } from '../styles/global';
@@ -150,7 +150,7 @@ export default function Home({ navigation }) {
         formData.append('maxCapacity', dontHaveLimit ? 0 : maxCapacity);
         formData.append('price', eventCost);
         try {
-            fetch('http://eventbuddy.localhost/api/create', {
+            fetch('http://api.weventsapp.it/api/create', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + value,
@@ -159,6 +159,7 @@ export default function Home({ navigation }) {
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     if (data.success == true) {
                         Alert.alert('Evento creato correttamente', 'Il tuo evento è stato creato con successo !', [
                             {
@@ -269,7 +270,7 @@ export default function Home({ navigation }) {
     ]);
 
   return (
-    <ScrollView>
+     <ScrollView style={[{ flex: 1, backgroundColor: '#FFF'}]}>
         <View style={{ flex: 1, backgroundColor: '#FFF', paddingBottom: 50 }}>
             <View style={globalStyles.viewImmagineCopertina}>
                 <TouchableOpacity onPress={pickImage}>

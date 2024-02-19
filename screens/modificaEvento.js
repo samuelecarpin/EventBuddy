@@ -126,7 +126,7 @@ export default function Home({ navigation }) {
 
     const getEvent = async () => {
         try {
-          const response = await fetch('http://eventbuddy.localhost/api/events/'+navigation.getParam('paramKey'), {
+          const response = await fetch('http://api.weventsapp.it/api/events/'+navigation.getParam('paramKey'), {
             method: 'GET',
             headers: {
               Authorization: 'Bearer '+ value
@@ -139,7 +139,7 @@ export default function Home({ navigation }) {
                 setDescription(data.description);
                 seteventAge(data.minimumAge);
                 seteventCost(data.price);
-                setImmagineBack({uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data.imagePath})
+                setImmagineBack({uri :'https://api.weventsapp.it/'+data.imagePath})
                 setLocation({
                   latitude: data.latitude,
                   longitude: data.longitude,
@@ -195,7 +195,7 @@ export default function Home({ navigation }) {
         formData.append('maxCapacity', dontHaveLimit ? 0 : maxCapacity);
         formData.append('price', eventCost);
         try {
-            fetch('http://eventbuddy.localhost/api/update/' + navigation.getParam('paramKey') + '?_method=PUT', {
+            fetch('http://api.weventsapp.it/api/update/' + navigation.getParam('paramKey') + '?_method=PUT', {
                 method: 'POST',
                 headers: {
                     Authorization: 'bearer ' + value,
@@ -292,7 +292,7 @@ export default function Home({ navigation }) {
         setSelectedImage(null);
         setImmagineBack({uri: ''})
         var formData = new FormData();
-        fetch('http://eventbuddy.localhost/api/update/' + navigation.getParam('paramKey') + '?delete=true&_method=PUT', {
+        fetch('http://api.weventsapp.it/api/update/' + navigation.getParam('paramKey') + '?delete=true&_method=PUT', {
             method: 'POST',
             headers: {
                 Authorization: 'bearer ' + value,

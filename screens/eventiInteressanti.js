@@ -1,9 +1,10 @@
 
 import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, Alert, ActivityIndicator, Image, TouchableOpacity} from 'react-native'; 
+import {View, Text, ScrollView, Alert, ActivityIndicator, Image, TouchableOpacity, Dimensions} from 'react-native'; 
 import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons'; 
 import * as SecureStore from 'expo-secure-store';
+var widthScreen = Dimensions.get('window').width;
 
 export default function Home({navigation}) { 
   const [events, setEvents] = useState([]);
@@ -49,7 +50,7 @@ export default function Home({navigation}) {
   }
   
   const getUserEvents = async() => {
-    fetch('http://eventbuddy.localhost/api/likedEvents', {
+    fetch('http://api.weventsapp.it/api/likedEvents', {
     method: 'GET',
     headers: {
         Accept: 'application/json',
@@ -66,20 +67,26 @@ export default function Home({navigation}) {
       for(let i = 0; i < data.length; i++){
         const eventEndDate = new Date(data[i].endDate);
         newEvents.push(
-            <>
-             <TouchableOpacity style={[globalStyles.containerCardEventi, {opacity:(eventEndDate > today ? 1 : 0.5 )}]}  onPress={() => apriEvento(data[i].id)}>
-               <Image
-                 source={{uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
-                 style={globalStyles.backgroundImageCardEventi}
-               />
-               <View style={globalStyles.contentContainerCardEventi}>
-                 <Text style={[globalStyles.titoloCardEventi, {paddingHorizontal: 10}]}>{data[i].name}</Text>
-                 <Text style={globalStyles.sottotitoloCardEventi}>
-                 Inizia il: {new Date(data[i].startDate).toLocaleString().split(",")[0]} {new Date(data[i].startDate).toLocaleString().split(" ")[1].slice(0,-3)}
-                 </Text>
-               </View>
-             </TouchableOpacity>
-            </>
+          <>
+          <TouchableOpacity onPress={() => apriEvento(data[i].id)} style={[globalStyles.containerEvent, {width: widthScreen-50, marginVertical: 20}]}>
+                  <View style={globalStyles.containerPhotoEvent}>
+                    <Image
+                      source={{uri :'https://api.weventsapp.it/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                      style={[globalStyles.backgroundImageCardEventi,{zIndex:-1,flex:1, borderRadius:40}]}
+                    />
+                  </View>
+                <View style={globalStyles.containerTitleEvent}>
+                  <Text style={{
+                            marginTop: 30,
+                            fontSize: 23,
+                            fontWeight: 'bold',
+                            color: 'black',
+                            textAlign: 'center',
+                    }}>{data[i].name}</Text>
+                    <Text style={[globalStyles.sottotitoloCardEventi,{color:"black", fontSize: 18}]}>Inizia il: {data[i].startDate} {findTime(data[i].startDate)}</Text>
+                </View>
+          </TouchableOpacity>
+          </>
         )
       }
       setLoading(false);
@@ -107,7 +114,7 @@ export default function Home({navigation}) {
           <View style={globalStyles.safeArea}></View>
           <View style={globalStyles.FormContainer}>
             <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                     <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                 </TouchableOpacity>
                 <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35, textAlign: 'center'}]}>Eventi che mi interessano</Text>

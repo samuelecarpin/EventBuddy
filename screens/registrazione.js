@@ -88,7 +88,7 @@ export default function login({navigation}) {
         formData.append('twitterLink', twitterLink);
         formData.append('youtubeLink', youtubeLink);
         formData.append('website', website);
-        fetch('http://eventbuddy.localhost/api/register', {
+        fetch('http://api.weventsapp.it/api/register', {
             method: 'POST',
             body: formData,
         })

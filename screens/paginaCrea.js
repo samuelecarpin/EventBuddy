@@ -23,7 +23,7 @@ export default function login({navigation}) {
 
     const chechToken = (token) => {
       setError(false);
-      fetch('http://eventbuddy.localhost/api/get_user', {
+      fetch('http://api.weventsapp.it/api/get_user', {
         method: 'GET',
         headers: {
             Accept: 'application/json',

@@ -1,10 +1,11 @@
 
 import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, Alert, ActivityIndicator, Image, TouchableOpacity} from 'react-native'; 
+import {View, Text, ScrollView, Alert, ActivityIndicator, Image, TouchableOpacity, Dimensions} from 'react-native'; 
 import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
+var widthScreen = Dimensions.get('window').width;
 
 export default function Home({navigation}) { 
   const [events, setEvents] = useState([]);
@@ -49,7 +50,7 @@ export default function Home({navigation}) {
         text: 'Si voglio eliminarlo',
         style: 'destructive',
         onPress: () =>
-          fetch(`http://eventbuddy.localhost/api/delete/${id}`, {
+          fetch(`http://api.weventsapp.it/api/delete/${id}`, {
             method: 'DELETE',
             headers: {
               Authorization: 'bearer ' + value,
@@ -104,7 +105,7 @@ export default function Home({navigation}) {
   }
   
   const getUserEvents = async() => {
-    fetch('http://eventbuddy.localhost/api/events', {
+    fetch('http://api.weventsapp.it/api/events', {
     method: 'GET',
     headers: {
         Accept: 'application/json',
@@ -129,30 +130,39 @@ export default function Home({navigation}) {
         }
         newEvents.push(
             <>
-            
-             <TouchableOpacity style={[globalStyles.containerCardEventi, {opacity:(eventEndDate > today ? 1 : 0.5 )}]}  onPress={() => apriEvento(data[i].id)}>
-               <Image
-                 source={{uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
-                 style={globalStyles.backgroundImageCardEventi}
-               />
-               <View style={globalStyles.contentContainerCardEventi}>
-                 <Text style={[globalStyles.titoloCardEventi, {paddingHorizontal: 10}]}>{data[i].name}</Text>
-                 <Text style={globalStyles.sottotitoloCardEventi}>
-                    Inizia il: {new Date(data[i].startDate).toLocaleString().split(",")[0]} {new Date(data[i].startDate).toLocaleString().split(" ")[1].slice(0,-3)}
-                 </Text>
-               </View>
-             </TouchableOpacity>
-             <View style={{flexDirection: 'row', marginVertical: 10}}>
-                  <TouchableOpacity style={{backgroundColor: '#f7f7f7', padding: 15, borderRadius: 20, marginRight: 20}}  onPress={() => duplicaEvento(data[i].id)} >
-                      <Text style={[{fontSize: 15, fontWeight: 500, alignItems:"center"}]}><Feather name="copy" size={17} color="black" /> Duplica</Text>
+            <View style={[{marginTop:20, marginBottom:10}]}>
+            <TouchableOpacity onPress={() => apriEvento(data[i].id)} style={[globalStyles.containerEvent, {width: widthScreen-50}]}>
+                  <View style={globalStyles.containerPhotoEvent}>
+                    <Image
+                      source={{uri :'https://api.weventsapp.it/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                      style={[globalStyles.backgroundImageCardEventi,{zIndex:-1,flex:1, borderRadius:40}]}
+                    />
+                  </View>
+            </TouchableOpacity>
+                <View style={globalStyles.containerTitleEvent2}>
+                <TouchableOpacity onPress={() => apriEvento(data[i].id)} style={[globalStyles.containerEvent, {width: widthScreen-50}]}>
+                  <Text style={{
+                            marginTop: 40,
+                            fontSize: 23,
+                            fontWeight: 'bold',
+                            color: 'black',
+                            textAlign: 'center',
+                    }}>{data[i].name}</Text>
+                    <Text style={[globalStyles.sottotitoloCardEventi,{color:"black", fontSize: 18}]}>Inizia il: {data[i].startDate} {findTime(data[i].startDate)}</Text>
+                </TouchableOpacity>
+             <View style={{flexDirection: 'row', marginTop:10}}>
+                  <TouchableOpacity style={{backgroundColor: '#062F76', padding: 10, borderRadius: 20, marginRight: 10}}  onPress={() => duplicaEvento(data[i].id)} >
+                      <Text style={[{fontSize: 15, fontWeight: 500, alignItems:"center",color: "white",}]}><Feather name="copy" size={17} color="white" /> Duplica</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity disabled={eventEndDate > today ? false : true } onPress={() => modificaEvento(data[i].id)} style={{ backgroundColor: '#f7f7f7', padding: 15, borderRadius: 20, marginRight: 20, opacity:(eventEndDate > today ? 1 : 0.5 )}}>
-                      <Text style={[{fontSize: 15, fontWeight: 500, alignItems:"center"}]}><Feather name="edit" size={17} color="black" /> Modifica</Text>
+                  <TouchableOpacity disabled={eventEndDate > today ? false : true } onPress={() => modificaEvento(data[i].id)} style={{ backgroundColor: '#062F76', padding: 10, borderRadius: 20, marginRight: 10, opacity:(eventEndDate > today ? 1 : 0.5 )}}>
+                      <Text style={[{fontSize: 15, fontWeight: 500, alignItems:"center",color: "white",}]}><Feather name="edit" size={17} color="white" /> Modifica</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity  onPress={() => eliminaEvento(data[i].id)} style={{backgroundColor: '#ff5b4f', padding: 15, borderRadius: 20}}>
+                  <TouchableOpacity  onPress={() => eliminaEvento(data[i].id)} style={{backgroundColor: '#ff5b4f', padding: 10, borderRadius: 20}}>
                       <Text style={[{fontSize: 15, color: "white", fontWeight: 600, alignItems:"center"}]}><Feather name="trash-2" size={17} color="white" /> Elimina</Text>
                   </TouchableOpacity>
               </View>
+            </View>
+            </View>
             </>
         )
       }
@@ -180,7 +190,7 @@ export default function Home({navigation}) {
           <View style={globalStyles.safeArea}></View>
           <View style={globalStyles.FormContainer}>
             <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                     <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                 </TouchableOpacity>
                 <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>I miei eventi</Text>

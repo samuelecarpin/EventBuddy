@@ -6,6 +6,7 @@ import { Octicons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import {Fontisto} from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import Mappa from '../components/Mappa';
 
@@ -36,7 +37,7 @@ export default function Home({navigation}) {
       {
           text: 'Si',
           onPress: () => {
-            fetch('http://eventbuddy.localhost/api/reportEvent', {
+            fetch('https://api.weventsapp.it/api/reportEvent', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -53,6 +54,7 @@ export default function Home({navigation}) {
                   {
                       text: 'OK'
                   },
+        
                 ]) 
               }
             });
@@ -68,20 +70,18 @@ export default function Home({navigation}) {
   const getEvent = async () => {
 
     try {
-      const response = await fetch('http://eventbuddy.localhost/api/showSingle/'+navigation.getParam('paramKey'), {
+      const response = await fetch('http://api.weventsapp.it/api/showSingle/'+navigation.getParam('paramKey'), {
         method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + value,
-        },
       })
       .then(response => response.json())
       .then(data => {
+        console.log(data)
           setDetails(data.details.split(","))
           setCapacity(data.maxCapacity === 0 ? 'Non ha limite di capacità' : "Capacità evento: " + data.maxCapacity);
-          setImmagineBack({uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data.imagePath})
+          setImmagineBack({uri :'https://api.weventsapp.it/'+data.imagePath})
           setLocation({
-            latitude: data.latitude,
-            longitude: data.longitude,
+            latitude: parseFloat(data.latitude),
+            longitude: parseFloat(data.longitude),
             latitudeDelta: 0.0422,
             longitudeDelta: 0.0421,
           });
@@ -108,7 +108,7 @@ export default function Home({navigation}) {
               <FontAwesome5 name="youtube" size={27} color="black" />
               </TouchableOpacity>
               <TouchableOpacity disabled={data.website == null ? true : false } style={{opacity:(data.website ? 1 : 0.5 )}} onPress={() => apriSocial(data.website)}>
-                <Entypo name="network" size={30} color="black" />
+                <Fontisto name="world-o" size={27} color="black" />
               </TouchableOpacity>
             </View>
           )
@@ -124,7 +124,7 @@ export default function Home({navigation}) {
     if (like == false ){
       setLike(true);
         try {
-          fetch('http://eventbuddy.localhost/api/like', {
+          fetch('https://api.weventsapp.it/api/like', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -138,11 +138,7 @@ export default function Home({navigation}) {
         .then(response => response.json())
           .then(data => {
               if(data.success) {
-                Alert.alert('Successo', 'Evento aggiunto agli eventi che ti interessano', [
-                  {
-                      text: 'OK'
-                  },
-              ]);
+                
               }
           })
       } catch (error) {
@@ -151,7 +147,7 @@ export default function Home({navigation}) {
     } else {
       setLike(false);
         try {
-          fetch('http://eventbuddy.localhost/api/unlike/'+navigation.getParam('paramKey'), {
+          fetch('https://api.weventsapp.it/api/unlike/'+navigation.getParam('paramKey'), {
           method: 'DELETE',
           headers: {
             Authorization: 'Bearer '+ value
@@ -160,11 +156,7 @@ export default function Home({navigation}) {
         .then(response => response.json())
           .then(data => {
               if(data.success) {
-                Alert.alert('Successo', 'Evento rimosso agli eventi che ti interessano', [
-                  {
-                      text: 'OK'
-                  },
-              ]);
+                
               }
           })
       } catch (error) {
@@ -183,9 +175,9 @@ export default function Home({navigation}) {
     function createDetails () {
       for(let i = 0; i < details.length; i++){
         dettagliEvento.push(
-          <View style={[globalStyles.row, {justifyContent: 'left'}]}>
-            <Image style={globalStyles.listItem} source={{ uri: '/Users/jacopofelluga/Apps/EventBuddyGit/assets/coriandoli.png'}} />
-            <Text style={{fontSize: 16, paddingRight: 70}}>{details[i]}</Text>
+          <View style={[globalStyles.row, {justifyContent: 'left', marginLeft:40}]}>
+            <Image style={[globalStyles.listItem,{color:"black"}]} source={ require('../assets/coriandoli.png')} />
+            <Text style={{fontSize: 16, paddingRight: 70, marginTop:4}}>{details[i]}</Text>
           </View>
         )
       }
@@ -193,8 +185,8 @@ export default function Home({navigation}) {
     }
 
     let [mapRegion, setLocation] = useState({
-      latitude: '45.4640976',
-      longitude: '9.1893516',
+      latitude: parseFloat('45.4640976'),
+      longitude: parseFloat('9.1893516'),
       latitudeDelta: 0.0422,
       longitudeDelta: 0.0421,
     });
@@ -269,7 +261,7 @@ export default function Home({navigation}) {
             </View>
             {/*direzioni */}
             <TouchableOpacity onPress={() => openMaps(mapRegion.latitude, mapRegion.longitude)} style={[globalStyles.infoContainer, {alignItems: 'center', marginTop: 0}]} >
-              <Text style={{ fontWeight: 'bold', fontSize: 20}}>Direzioni evento</Text>
+              <Text style={{ fontWeight: 'bold', fontSize: 20}}>Clicca per direzioni evento</Text>
             </TouchableOpacity>
             {/*mappa */}
             <View style={[globalStyles.mapContainer, {marginTop: 15, marginBottom: 15}]}>

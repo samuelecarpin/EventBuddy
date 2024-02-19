@@ -28,7 +28,7 @@ export default function Home({navigation}) {
   }
   const getEvent = async () => {
     try {
-      const response = await fetch('http://eventbuddy.localhost/api/events/'+navigation.getParam('paramKey'), {
+      const response = await fetch('http://api.weventsapp.it/api/events/'+navigation.getParam('paramKey'), {
         method: 'GET',
         headers: {
           Authorization: 'Bearer '+ value
@@ -38,10 +38,10 @@ export default function Home({navigation}) {
       .then(data => {
           setDetails(data.details.split(","))
           setDetails(current => [...current, data.price, data.minimumAge, data.maxCapacity]);
-          data.imagePath != null ? setImmagineBack({uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data.imagePath}) : setImmagineBack({uri :'/Users/jacopofelluga/Apps/EventBuddyGit/assets/image'+Math.floor(Math.random() * 5) + 1+'.png'})
+          data.imagePath != null ? setImmagineBack({uri :'https://api.weventsapp.it/'+data.imagePath}) : setImmagineBack({uri :'/Users/jacopofelluga/Apps/EventBuddyGit/assets/image'+Math.floor(Math.random() * 5) + 1+'.png'})
           setLocation({
-            latitude: data.latitude,
-            longitude: data.longitude,
+            latitude: parseFloat(data.latitude),
+            longitude: parseFloat(data.longitude),
             latitudeDelta: 0.0422,
             longitudeDelta: 0.0421,
           });

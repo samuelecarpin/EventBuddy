@@ -48,7 +48,7 @@ function gestisciCalendario() {
   };
 
   function getUserData() {
-    fetch('http://eventbuddy.localhost/api/get_user', {
+    fetch('http://api.weventsapp.it/api/get_user', {
       method: 'GET',
       headers: {
         Authorization: 'Bearer '+ value
@@ -80,7 +80,7 @@ function gestisciCalendario() {
 
   function saveUserData () {
     forceUpdateKey = !forceUpdateKey;
-    fetch('http://eventbuddy.localhost/api/updateUser?type=info&_method=PUT', {
+    fetch('http://api.weventsapp.it/api/updateUser?type=info&_method=PUT', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -130,12 +130,11 @@ function gestisciCalendario() {
   
 
   return (
-    <ScrollView>
-        <View style={{ flex: 1, backgroundColor: '#FFF', paddingBottom: 50, minHeight: '100%' }}>
-        <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
-            <View style={globalStyles.FormContainer}>
+    <View style={{ flex: 1, backgroundColor: '#FFF', paddingBottom:50}}>
+    <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
+            <View style={[globalStyles.FormContainer, {height:"90%"}]}>
             <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                     <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                 </TouchableOpacity>
                 <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>Informazioni</Text>
@@ -168,12 +167,13 @@ function gestisciCalendario() {
                 {/* <Text style={{ fontWeight: 'bold', fontSize: 20}} >CodiceFiscale</Text>
                 <TextInput style={globalStyles.input}>CodiceFiscale</TextInput> */}
                 <Text style={{ fontWeight: 'bold', fontSize: 20}} >Username</Text>
-                <TextInput onChangeText={username => setUsername(username)} style={globalStyles.input} placeholder='Username' >{username}</TextInput>
+                <TextInput onChangeText={username => setUsername(username)} style={[globalStyles.input]} placeholder='Username' >{username}</TextInput>
+                </View>
+              <View style={[globalStyles.FormContainer2]}>  
                 <TouchableOpacity style={[globalStyles.button, {marginTop: 15}]} onPress={saveUserData}>
                 <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Salva</Text>
                 </TouchableOpacity>
-            </View>
-        </View>
-    </ScrollView>
+              </View>
+              </View>
   );
 }

@@ -30,7 +30,7 @@ export default function Home({ navigation }) {
   };
 
   function getUserData() {
-    fetch('http://eventbuddy.localhost/api/get_user', {
+    fetch('http://api.weventsapp.it/api/get_user', {
       method: 'GET',
       headers: {
         Authorization: 'Bearer '+ value
@@ -62,7 +62,7 @@ export default function Home({ navigation }) {
   });
 
   function saveUserData () {
-    fetch('http://eventbuddy.localhost/api/updateUser?type=links&_method=PUT', {
+    fetch('http://api.weventsapp.it/api/updateUser?type=links&_method=PUT', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -115,11 +115,11 @@ export default function Home({ navigation }) {
         <View style={[ globalStyles.FormContainer2, {height:"90%"}]}>
             <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
                 <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                    <TouchableOpacity onPress={goBack}>
+                    <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                         <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                     </TouchableOpacity>
                     <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>Link ai social</Text>
-                    <TouchableOpacity onPress={goBack}>
+                    <TouchableOpacity>
                         <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
                     </TouchableOpacity>
                 </View>

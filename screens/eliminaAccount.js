@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
   };
 
   const deleteAccount = () => {
-    fetch('http://eventbuddy.localhost/api/deleteUser', {
+    fetch('http://api.weventsapp.it/api/deleteUser', {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',

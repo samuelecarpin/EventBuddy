@@ -23,7 +23,7 @@ export default function login({navigation}) {
   getValueFor(key);
 
   const chechToken = (token) => {
-    fetch('http://eventbuddy.localhost/api/get_user', {
+    fetch('http://api.weventsapp.it/api/get_user', {
       method: 'GET',
       headers: {
           Accept: 'application/json',
@@ -52,7 +52,7 @@ export default function login({navigation}) {
 
   const logIn = async () => {
     try {
-      const response = await fetch('http://eventbuddy.localhost/api/login', {
+      const response = await fetch('http://api.weventsapp.it/api/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

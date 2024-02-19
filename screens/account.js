@@ -37,7 +37,7 @@ export default function login({navigation}) {
     }
 
     const logOut = async() => {
-        fetch('http://eventbuddy.localhost/api/logout', {
+        fetch('http://api.weventsapp.it/api/logout', {
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -69,7 +69,7 @@ export default function login({navigation}) {
             name: 'selected.jpg',
             type: 'image/jpeg',
         });
-        fetch('http://eventbuddy.localhost/api/updateUser?type=image&_method=PUT', {
+        fetch('http://api.weventsapp.it/api/updateUser?type=image&_method=PUT', {
             method: 'POST',
             headers: {
                 Authorization: 'bearer ' + value,
@@ -123,7 +123,7 @@ export default function login({navigation}) {
         setrimuoviTitolo(true);
         setImmagineBack({uri: ''})
         var formData = new FormData();
-        fetch('http://eventbuddy.localhost/api/updateUser?type=image&delete=true&_method=PUT', {
+        fetch('http://api.weventsapp.it/api/updateUser?type=image&delete=true&_method=PUT', {
             method: 'POST',
             headers: {
                 Authorization: 'bearer ' + value,
@@ -155,7 +155,7 @@ export default function login({navigation}) {
     }
 
     const getUserData = async() => {
-        fetch('http://eventbuddy.localhost/api/get_user', {
+        fetch('http://api.weventsapp.it/api/get_user', {
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -167,7 +167,7 @@ export default function login({navigation}) {
         .then(data => {
             setHaveValues(true);
             setUsername(data.user.username)
-            setImmagineBack({uri: data.user.accountImage != '' ? '/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data.user.accountImage : ''})
+            setImmagineBack({uri: data.user.accountImage != '' ? 'https://api.weventsapp.it/'+data.user.accountImage : ''})
             data.user.accountImage != '' ? setrimuoviTitolo(false) : '';
         })
     }
@@ -204,15 +204,17 @@ export default function login({navigation}) {
 
   return(
     // safearea X non intralciare con date e robe
-    <SafeAreaView key={refreshing} style={{ flex: 1, backgroundColor: '#FFF'}}>
+
+    <View key={refreshing} style={{ flex: 1, backgroundColor: '#FFF'}}>
+        <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
         <ScrollView key={refreshing}  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             <View style={{flex: 1}}>
                 <View style={globalStyles.FormContainer}>
-                    <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold'}]}>
+                    <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', marginBottom:10, alignItems:"center", textAlign:"center"}]}>
                         <TouchableOpacity onPress={() => navigation.navigate('accountInterfacePersonal')}>
                             <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                         </TouchableOpacity>
-                        <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 25}]}>Profilo</Text>
+                        <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>Profilo</Text>
                         <TouchableOpacity>
                             <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
                         </TouchableOpacity>
@@ -277,6 +279,6 @@ export default function login({navigation}) {
                 </View>
             </View>
         </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };

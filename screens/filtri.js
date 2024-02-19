@@ -1,7 +1,7 @@
 
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Modal, KeyboardAvoidingView } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -16,6 +16,10 @@ export default function Home({ navigation }) {
 
   const dataOdierna = new Date();
   const dataPartenza = getFormatedDate(dataOdierna.setDate(dataOdierna.getDate()), 'YYYY/MM/DD')
+
+  const chiudiCalendario = () => {
+    setapriCalendario(false);
+};
 
   function privateFilter (query, filter){
     privateEvent = !privateEvent;
@@ -108,11 +112,12 @@ export default function Home({ navigation }) {
   }
 
   return (
+    /*<KeyboardAvoidingView style={[{ flex: 1}]} enabled={true} behavior={'padding'}>*/
     <ScrollView style={[{ flex: 1, backgroundColor: '#FFF'}]}>
     <View style={[ globalStyles.FormContainer2]}>
     <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
     <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                  <TouchableOpacity onPress={goBack}>
+                  <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                       <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                   </TouchableOpacity>
                   <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>Filtri</Text>
@@ -127,6 +132,9 @@ export default function Home({ navigation }) {
     <TouchableOpacity onPress={() => publicFilter("eventType,=,public", "filter")} style={globalStyles.button2} >
     <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 17}]}>Evento pubblico {publicEvent == true ? <Feather name="check" size={24} color="white" /> : ""}</Text>
     </TouchableOpacity>
+    <TouchableOpacity>
+          <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color={minAge != 0 ? "black" : "white"}/>
+        </TouchableOpacity>
     <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >A partire dalla data:</Text>
       <TouchableOpacity style={[globalStyles.input, globalStyles.selettorePiccolo, {marginBottom: 0, marginTop: 10}]} onPress={gestisciCalendario}>
         <Text style={{ alignSelf: 'center'}}>{minDate}</Text>
@@ -138,7 +146,9 @@ export default function Home({ navigation }) {
             <View style={globalStyles.vistaCentrata}>
                 <View style={globalStyles.vistaCalendario}>
                     <DatePicker mode='calendar' selected={dataFineEvento == false ? minDate : dataFineEvento} onDateChange={minDateFilter} minimumDate={dataPartenza} />
-                    
+                    <TouchableOpacity onPress={chiudiCalendario}>
+                    <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color="black"/>
+                    </TouchableOpacity>
                 </View>
             </View> 
             </Modal>
@@ -159,13 +169,17 @@ export default function Home({ navigation }) {
           <Text style={{ fontWeight: 'bold', fontSize: 20, marginTop: 10}} >Area di copoertura (in Km):</Text>
           <View style={{alignItems:"center"}}>
           <TextInput onChangeText={text => area = text} style={[globalStyles.input, globalStyles.selettorePiccolo, {marginTop:10}]} onSubmitEditing={updateArea} returnKeyType="done" placeholder="150" keyboardType='number-pad'>{area}</TextInput>
+          <TouchableOpacity>
+            <AntDesign style={{marginTop: 15}} name="closecircleo" size={24} color={maxPrice != "" ? "black" : "white"}/>
+          </TouchableOpacity>
             </View>
     </View>
-            {/* <View style={[ globalStyles.FormContainer2, {paddingBottom: 20}]}>
+            <View style={[ globalStyles.FormContainer2, {paddingBottom: 20}]}>
                   <TouchableOpacity style={globalStyles.button}>
-                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Invia</Text>
+                    <Text style={[globalStyles.whiteText, { fontWeight: 'bold', fontSize: 20}]}>Applica filtri</Text>
                   </TouchableOpacity>
-            </View>  */}
+            </View>  
 </ScrollView>
+/*</KeyboardAvoidingView>*/
   );
 };

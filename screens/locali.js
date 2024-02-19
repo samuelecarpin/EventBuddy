@@ -41,7 +41,7 @@ export default function Home({navigation}) {
 
   const searchUsers = () => {
     setEvents([])
-    fetch('http://eventbuddy.localhost/api/searchCommercial?commName='+searchValue, {
+    fetch('http://api.weventsapp.it/api/searchCommercial?commName='+searchValue, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -55,7 +55,7 @@ export default function Home({navigation}) {
         commercials.push(
              <TouchableOpacity style={[globalStyles.containerCardEventi]}  onPress={() => apriEvento(data[i].id)}>
               <Image
-                source={{uri : '/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                source={{uri : 'https://api.weventsapp.it/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
                 style={globalStyles.backgroundImageCardEventi}
               />
                <View style={globalStyles.contentContainerCardEventi}>
@@ -74,7 +74,7 @@ export default function Home({navigation}) {
   }
   
   const getUserEvents = async() => {
-    fetch('http://eventbuddy.localhost/api/commercials', {
+    fetch('http://api.weventsapp.it/api/commercials', {
     method: 'GET',
     })
     .then(response => response.json())
@@ -85,7 +85,7 @@ export default function Home({navigation}) {
         commercials.push(
              <TouchableOpacity style={[globalStyles.containerCardEventi]}  onPress={() => apriLocale(data[i].id)}>
               <Image
-                source={{uri : '/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                source={{uri : 'https://api.weventsapp.it/'+data[i].accountImage}} // Assicurati di sostituire con il percorso corretto della tua immagine
                 style={globalStyles.backgroundImageCardEventi}
               />
                <View style={globalStyles.contentContainerCardEventi}>

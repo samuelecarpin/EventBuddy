@@ -103,7 +103,7 @@ export default function Home({ navigation }) {
 
     const getEvent = async () => {
         try {
-          const response = await fetch('http://eventbuddy.localhost/api/events/'+navigation.getParam('paramKey'), {
+          const response = await fetch('http://api.weventsapp.it/api/events/'+navigation.getParam('paramKey'), {
             method: 'GET',
             headers: {
               Authorization: 'Bearer '+ value
@@ -194,7 +194,7 @@ export default function Home({ navigation }) {
         formData.append('minimumAge', eventAge);
         formData.append('maxCapacity', dontHaveLimit ? 0 : maxCapacity);
         formData.append('price', eventCost);
-        fetch('http://eventbuddy.localhost/api/create', {
+        fetch('http://api.weventsapp.it/api/create', {
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + value,

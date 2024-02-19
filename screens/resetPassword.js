@@ -15,7 +15,7 @@ export default function Home({ navigation }) {
   };
 
   const vaiAResetPasswordContinua = () => {
-    fetch('http://eventbuddy.localhost/api/resetPassword', {
+    fetch('http://api.weventsapp.it/api/resetPassword', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

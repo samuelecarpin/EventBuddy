@@ -354,13 +354,13 @@ export const globalStyles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignContent: "center",
-      marginTop: 15,
-      marginBottom: 15
+      marginTop: 30,
+      marginBottom: 5,
     },
     containerCardEventi: {
       width: widthScreen-50,
       height:widthScreen*7/10,
-      marginTop:10,
+      marginTop:0,
       marginBottom: 10,
       marginHorizontal:10,
       flex: 1,
@@ -420,7 +420,7 @@ export const globalStyles = StyleSheet.create({
       borderBottomWidth: 2
     },
     safeArea: {
-      height: 50,
+      height: 20,
       backgroundColor: 'white'
     },
     bottoniInBasso: {
@@ -543,6 +543,16 @@ export const globalStyles = StyleSheet.create({
       zIndex: -1,
       marginTop:"-10%",
       height:130,
+      borderBottomLeftRadius: 40,
+      borderBottomRightRadius: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f7f7f7',
+    },
+    containerTitleEvent2: {
+      zIndex: -1,
+      marginTop:"-10%",
+      height:180,
       borderBottomLeftRadius: 40,
       borderBottomRightRadius: 40,
       justifyContent: 'center',

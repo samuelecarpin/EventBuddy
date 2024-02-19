@@ -11,6 +11,7 @@ var widthScreen = Dimensions.get('window').width; //full width
 
 export default function Home({ navigation }) {
 
+  const [hasEvents, sethasEvents] = useState(false);
   const [events, setEvents] = useState([]);
   const [haveValues, setHaveValues] = useState(false);
   const [noEvents, setNoEvents] = useState(false);
@@ -56,7 +57,7 @@ export default function Home({ navigation }) {
   }
   
   const getUserEvents = async() => {
-    fetch('http://eventbuddy.localhost/api/likedEvents', {
+    fetch('http://api.weventsapp.it/api/likedEvents', {
     method: 'GET',
     headers: {
         Accept: 'application/json',
@@ -66,6 +67,8 @@ export default function Home({ navigation }) {
     })
     .then(response => response.json())
     .then(data => {
+      if(data != ""){
+        sethasEvents(true);
       setHaveValues(true);
       var newEvents = [];
       var oldDates = false;
@@ -75,7 +78,7 @@ export default function Home({ navigation }) {
           <TouchableOpacity onPress={() => apriEvento(data[i].id)} style={[globalStyles.containerEvent, {width: widthScreen-50, marginVertical: 20}]}>
                   <View style={globalStyles.containerPhotoEvent}>
                     <Image
-                      source={{uri :'/Users/jacopofelluga/Apps/php/EventBuddy/storage/app/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
+                      source={{uri :'https://api.weventsapp.it/'+data[i].imagePath}} // Assicurati di sostituire con il percorso corretto della tua immagine
                       style={[globalStyles.backgroundImageCardEventi,{zIndex:-1,flex:1, borderRadius:40}]}
                     />
                   </View>
@@ -97,6 +100,9 @@ export default function Home({ navigation }) {
       if (data.length == 0) {
         setNoEvents(true)
       }
+    }else{
+      sethasEvents(false);
+    }
       })
     }
 
@@ -118,17 +124,17 @@ return (
         <View style={[{backgroundColor:"#FFF"},{height:20}]}></View>
             <View style={globalStyles.FormContainer}>
             <View style={[globalStyles.rigaTitoli, { fontWeight: 'bold', fontSize: 35, marginBottom: 30}]}>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity onPress={goBack} style={{marginTop:5}}>
                     <Ionicons name="ios-chevron-back-sharp" size={33} color="black" />
                 </TouchableOpacity>
                 <Text style={[globalStyles.titoliRiga, { fontWeight: 'bold', fontSize: 35}]}>Eventi visitati</Text>
-                <TouchableOpacity onPress={goBack}>
+                <TouchableOpacity>
                     <Ionicons name="ios-chevron-back-sharp" size={33} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={[globalStyles.FormContainer]}>
               <Text style={[{ fontWeight: 'bold', fontSize: 20}]} >Ordina per: Recenti</Text>
-              {events}
+              {hasEvents==true ? events : <Text style={[globalStyles.testoEventiVicini,{color: "#b8b8b8"}]}>Non ci sono eventi visitati</Text>}
             </View>
             </View>
             </View>
